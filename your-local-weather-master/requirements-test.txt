@@ -1,4 +1,0 @@
-pycodestyle
-codecov
-pylint
-pylint-django
