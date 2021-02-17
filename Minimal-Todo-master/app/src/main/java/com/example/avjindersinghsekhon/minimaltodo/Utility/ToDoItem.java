@@ -12,6 +12,8 @@ public class ToDoItem implements Serializable {
     private boolean mHasReminder;
     //add description
     private String mToDoDescription;
+    // add a link
+    private String mLink;
     //    private Date mLastEdited;
     private int mTodoColor;
     private Date mToDoDate;
@@ -26,7 +28,7 @@ public class ToDoItem implements Serializable {
     private static final String TODOIDENTIFIER = "todoidentifier";
 
 
-    public ToDoItem(String todoBody,String tododescription,  boolean hasReminder, Date toDoDate) {
+    public ToDoItem(String todoBody,String tododescription, boolean hasReminder, Date toDoDate) {
         mToDoText = todoBody;
         mHasReminder = hasReminder;
         mToDoDate = toDoDate;
@@ -35,6 +37,20 @@ public class ToDoItem implements Serializable {
         mTodoIdentifier = UUID.randomUUID();
     }
 
+    // temporary constructor which contains the link
+    // will merge with the main one above afterwards
+    public ToDoItem(String todoBody,String tododescription, String todoLink, boolean hasReminder, Date toDoDate) {
+        mToDoText = todoBody;
+        mHasReminder = hasReminder;
+        mToDoDate = toDoDate;
+        mLink = todoLink;
+        mToDoDescription = tododescription;
+        mTodoColor = 1677725;
+        mTodoIdentifier = UUID.randomUUID();
+    }
+
+    // constructor which takes in a jsonObject
+    // used for writing to file?
     public ToDoItem(JSONObject jsonObject) throws JSONException {
         mToDoText = jsonObject.getString(TODOTEXT);
         mToDoDescription = jsonObject.getString(TODODESCRIPTION);
@@ -67,47 +83,64 @@ public class ToDoItem implements Serializable {
     }
 
 
+    // empty constructor which makes a default note with placeholder info
     public ToDoItem() {
         this("Clean my room","Sweep and Mop my Room", true, new Date());
     }
 
+    // getter for the description
     public String getmToDoDescription() { return mToDoDescription;}
 
+    // setter for the description
     public void setmToDoDescription(String mToDoDescription){this.mToDoDescription = mToDoDescription;}
 
+    // getter for the title
     public String getToDoText() {
         return mToDoText;
     }
 
+    // setter for the title
     public void setToDoText(String mToDoText) {
         this.mToDoText = mToDoText;
     }
 
+    // getter for the link
+    public String getmLink(){return mLink;}
+
+    // setter for the link
+    public void setmLink(String todoLink){this.mLink = todoLink;}
+
+    // getter for if the task has a reminder
     public boolean hasReminder() {
         return mHasReminder;
     }
 
+    // setter for the task giving it a reminder
     public void setHasReminder(boolean mHasReminder) {
         this.mHasReminder = mHasReminder;
     }
 
+    // getter for the date
     public Date getToDoDate() {
         return mToDoDate;
     }
 
+    // getter for the color
     public int getTodoColor() {
         return mTodoColor;
     }
 
+    // setter for the color
     public void setTodoColor(int mTodoColor) {
         this.mTodoColor = mTodoColor;
     }
 
+    // setter for the date
     public void setToDoDate(Date mToDoDate) {
         this.mToDoDate = mToDoDate;
     }
 
-
+    // getter for identifier
     public UUID getIdentifier() {
         return mTodoIdentifier;
     }

@@ -246,7 +246,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
                     @Override
                     public void afterTextChanged(Editable s) {
                     }
-                });
+        });
 
 
 //        String lastSeen = formatDate(DATE_FORMAT, mLastEdited);

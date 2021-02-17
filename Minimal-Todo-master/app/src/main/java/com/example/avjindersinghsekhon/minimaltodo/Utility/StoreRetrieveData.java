@@ -34,6 +34,7 @@ public class StoreRetrieveData {
         return jsonArray;
     }
 
+    // this is where the tasks are saved to the file/hard drive
     public void saveToFile(ArrayList<ToDoItem> items) throws JSONException, IOException {
         FileOutputStream fileOutputStream;
         OutputStreamWriter outputStreamWriter;
