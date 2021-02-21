@@ -81,6 +81,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 
     private String mUserEnteredText;
     private String mUserEnteredDescription;
+    private String mUserEnteredLink;
     private boolean mUserHasReminder;
     private Toolbar mToolbar;
     private Date mUserReminderDate;
@@ -593,10 +594,12 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
             mUserToDoItem.setToDoText(capitalizedString);
             Log.d(TAG, "Description: " + mUserEnteredDescription);
             mUserToDoItem.setmToDoDescription(mUserEnteredDescription);
+            mUserToDoItem.setmLink(mUserEnteredLink);
         } else {
             mUserToDoItem.setToDoText(mUserEnteredText);
             Log.d(TAG, "Description: " + mUserEnteredDescription);
             mUserToDoItem.setmToDoDescription(mUserEnteredDescription);
+            mUserToDoItem.setmLink(mUserEnteredLink);
         }
 //        mUserToDoItem.setLastEdited(mLastEdited);
         if (mUserReminderDate != null) {

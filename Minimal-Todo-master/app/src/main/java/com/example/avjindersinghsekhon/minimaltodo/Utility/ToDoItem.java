@@ -28,18 +28,7 @@ public class ToDoItem implements Serializable {
     private static final String TODOIDENTIFIER = "todoidentifier";
 
 
-    public ToDoItem(String todoBody,String tododescription, boolean hasReminder, Date toDoDate) {
-        mToDoText = todoBody;
-        mHasReminder = hasReminder;
-        mToDoDate = toDoDate;
-        mToDoDescription = tododescription;
-        mTodoColor = 1677725;
-        mTodoIdentifier = UUID.randomUUID();
-    }
-
-    // temporary constructor which contains the link
-    // will merge with the main one above afterwards
-    public ToDoItem(String todoBody,String tododescription, String todoLink, boolean hasReminder, Date toDoDate) {
+    public ToDoItem(String todoBody,String tododescription,String todoLink ,boolean hasReminder, Date toDoDate) {
         mToDoText = todoBody;
         mHasReminder = hasReminder;
         mToDoDate = toDoDate;
@@ -85,7 +74,7 @@ public class ToDoItem implements Serializable {
 
     // empty constructor which makes a default note with placeholder info
     public ToDoItem() {
-        this("Clean my room","Sweep and Mop my Room", true, new Date());
+        this("Clean my room","Sweep and Mop my Room","www.google.com", true, new Date());
     }
 
     // getter for the description
