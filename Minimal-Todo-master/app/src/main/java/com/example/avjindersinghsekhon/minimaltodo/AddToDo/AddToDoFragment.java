@@ -16,8 +16,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
+import android.text.method.LinkMovementMethod;
+import android.text.util.Linkify;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -56,6 +61,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 
     private EditText mToDoTextBodyEditText;
     private EditText mToDoTextBodyDescription;
+    private EditText mToDoTextBodyLink;
 
     private SwitchCompat mToDoDateSwitch;
     //    private TextView mLastSeenTextView;
@@ -132,6 +138,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
         mUserToDoItem = (ToDoItem) getActivity().getIntent().getSerializableExtra(MainFragment.TODOITEM);
 
         mUserEnteredText = mUserToDoItem.getToDoText();
+        mUserEnteredLink = mUserToDoItem.getmLink();
         mUserEnteredDescription = mUserToDoItem.getmToDoDescription();
         mUserHasReminder = mUserToDoItem.hasReminder();
         mUserReminderDate = mUserToDoItem.getToDoDate();
@@ -161,6 +168,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
         mContainerLayout = (LinearLayout) view.findViewById(R.id.todoReminderAndDateContainerLayout);
         mUserDateSpinnerContainingLinearLayout = (LinearLayout) view.findViewById(R.id.toDoEnterDateLinearLayout);
         mToDoTextBodyEditText = (EditText) view.findViewById(R.id.userToDoEditText);
+        mToDoTextBodyLink = (EditText) view.findViewById(R.id.userToDoLink);
         mToDoTextBodyDescription= (EditText) view.findViewById(R.id.userToDoDescription);
         mToDoDateSwitch = (SwitchCompat) view.findViewById(R.id.toDoHasDateSwitchCompat);
 //        mLastSeenTextView = (TextView)findViewById(R.id.toDoLastEditedTextView);
@@ -192,6 +200,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
             public void onClick(View v) {
                 hideKeyboard(mToDoTextBodyEditText);
                 hideKeyboard(mToDoTextBodyDescription);
+                hideKeyboard(mToDoTextBodyLink);
             }
         });
 
@@ -247,6 +256,35 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
                     @Override
                     public void afterTextChanged(Editable s) {
                     }
+        });
+
+         /*
+            This is the listener for the link text box
+            Also used for setting other properties
+         */
+
+        mToDoTextBodyLink.setMovementMethod(LinkMovementMethod.getInstance());
+        mToDoTextBodyLink.setLinksClickable(true);
+        mToDoTextBodyLink.setAutoLinkMask(Linkify.WEB_URLS);
+        Linkify.addLinks(mToDoTextBodyLink,Linkify.WEB_URLS);
+        mToDoTextBodyLink.setText(mUserEnteredLink);
+        mToDoTextBodyLink.setSelection(mToDoTextBodyLink.length());
+        mToDoTextBodyLink.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int i, int i1, int i2) {
+                mUserEnteredLink = s.toString();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                Linkify.addLinks(editable,Linkify.WEB_URLS);
+            }
         });
 
 

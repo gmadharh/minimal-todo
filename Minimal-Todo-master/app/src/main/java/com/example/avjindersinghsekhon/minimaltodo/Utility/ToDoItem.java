@@ -20,6 +20,7 @@ public class ToDoItem implements Serializable {
     private UUID mTodoIdentifier;
     //add description
     private static final String TODODESCRIPTION = "tododescription";
+    private static final String TODOLINK = "todolink";
     private static final String TODOTEXT = "todotext";
     private static final String TODOREMINDER = "todoreminder";
     //    private static final String TODOLASTEDITED = "todolastedited";
@@ -45,6 +46,7 @@ public class ToDoItem implements Serializable {
         mToDoDescription = jsonObject.getString(TODODESCRIPTION);
         mHasReminder = jsonObject.getBoolean(TODOREMINDER);
         mTodoColor = jsonObject.getInt(TODOCOLOR);
+        mLink = jsonObject.getString(TODOLINK);
 
         mTodoIdentifier = UUID.fromString(jsonObject.getString(TODOIDENTIFIER));
 
@@ -61,6 +63,7 @@ public class ToDoItem implements Serializable {
         jsonObject.put(TODOTEXT, mToDoText);
         jsonObject.put(TODOREMINDER, mHasReminder);
         jsonObject.put(TODODESCRIPTION, mToDoDescription);
+        jsonObject.put(TODOLINK,mLink);
 //        jsonObject.put(TODOLASTEDITED, mLastEdited.getTime());
         if (mToDoDate != null) {
             jsonObject.put(TODODATE, mToDoDate.getTime());
