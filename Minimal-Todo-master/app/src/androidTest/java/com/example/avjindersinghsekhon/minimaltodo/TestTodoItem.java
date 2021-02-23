@@ -38,6 +38,7 @@ import java.util.Date;
 public class TestTodoItem extends TestCase {
     private final Date CURRENT_DATE = new Date();
     private final String TEXT_BODY = "This is some text";
+    private final String TEXT_LINK = "www.google.com";
     private final boolean REMINDER_OFF = false;
     private final boolean REMINDER_ON = true;
 
@@ -53,6 +54,7 @@ public class TestTodoItem extends TestCase {
 
      /**
       * Ensure we can marshall ToDoItem objects to Json
+      * Added an assert here for testing if the link is written to the JSON
       */
     public void testObjectMarshallingToJson() {
         ToDoItem toDoItem = getToDoItem(REMINDER_ON);
@@ -61,6 +63,8 @@ public class TestTodoItem extends TestCase {
             JSONObject json = toDoItem.toJSON();
             assertEquals(TEXT_BODY, json.getString("todotext"));
             assertEquals(REMINDER_ON, json.getBoolean("todoreminder"));
+            // testing if the link was written to the json
+            assertEquals(TEXT_LINK,json.getString("todolink"));
             assertEquals(String.valueOf(CURRENT_DATE.getTime()), json.getString("tododate"));
         } catch (JSONException e) {
             fail("Exception thrown during test execution: " + e.getMessage());
@@ -69,6 +73,7 @@ public class TestTodoItem extends TestCase {
 
     /**
     * Ensure we can create ToDoItem objects from Json data by using the json constructor
+     * Added an assert here to test if the link can be retrieved from the JSON into a ToDoItem object
     */
     public void testObjectUnmarshallingFromJson() {
         ToDoItem originalItem = getToDoItem(REMINDER_OFF);
@@ -78,6 +83,8 @@ public class TestTodoItem extends TestCase {
             ToDoItem itemFromJson = new ToDoItem(json);
 
             assertEquals(originalItem.getToDoText(), itemFromJson.getToDoText());
+            // testing if the link retrieved matches the one in the object
+            assertEquals(originalItem.getmLink(),itemFromJson.getmLink());
             assertEquals(originalItem.getToDoDate(), itemFromJson.getToDoDate());
             assertEquals(originalItem.hasReminder(), itemFromJson.hasReminder());
             assertEquals(originalItem.getIdentifier(), itemFromJson.getIdentifier());
@@ -88,6 +95,6 @@ public class TestTodoItem extends TestCase {
     }
 
     private ToDoItem getToDoItem(boolean hasReminder) {
-        return new ToDoItem(TEXT_BODY, hasReminder, CURRENT_DATE);
+        return new ToDoItem(TEXT_BODY,TEXT_BODY,TEXT_LINK,hasReminder, CURRENT_DATE);
     }
 }

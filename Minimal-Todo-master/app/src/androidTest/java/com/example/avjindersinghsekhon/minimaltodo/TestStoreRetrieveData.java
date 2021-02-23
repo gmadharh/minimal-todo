@@ -41,6 +41,7 @@ import java.util.Date;
 public class TestStoreRetrieveData extends ActivityUnitTestCase<MainActivity> {
 
     private MainActivity mMainActivity;
+    public static final String FILENAME = "todoitems.json";
     private ArrayList<ToDoItem> mOriginalData;
     ArrayList<ToDoItem> mTestData;
 
@@ -52,6 +53,8 @@ public class TestStoreRetrieveData extends ActivityUnitTestCase<MainActivity> {
         for (int i = 1; i < 11; i++) {
             mTestData.add(new ToDoItem(
                     "item" + i,
+                    "",
+                    "",
                     false,
                     new Date()));
         }
@@ -168,6 +171,6 @@ public class TestStoreRetrieveData extends ActivityUnitTestCase<MainActivity> {
 
     private StoreRetrieveData getDataStorage() {
         Context context = getInstrumentation().getTargetContext();
-        return new StoreRetrieveData(context, MainActivity.FILENAME);
+        return new StoreRetrieveData(context, FILENAME);
     }
 }
