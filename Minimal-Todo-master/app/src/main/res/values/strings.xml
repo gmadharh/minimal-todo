@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Minimal</string>
+    <string name="app_name">Minimal To Do App</string>
     <string name="action_settings">Settings</string>
-    <string name="no_to_dos">You don\'t have any todos</string>
+    <string name="no_to_dos"><font fgcolor='#FFFFFF'>You don\'t have any todos</font></string>
     <string name="title">Title</string>
     <string name="remind_me">Remind Me</string>
     <string name="choose_date">Date</string>

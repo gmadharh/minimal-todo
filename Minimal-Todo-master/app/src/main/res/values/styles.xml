@@ -53,10 +53,9 @@
         <item name="titleTextAppearance">@style/ToolbarTitleTextAppearanceLight</item>
     </style>
 
-    <!--Change color of title on Toolbar-->
+    <!--Change color of title on Toolbar of the settings pages -->
     <style name="ToolbarTitleTextAppearanceLight" parent="Base.TextAppearance.AppCompat.Widget.ActionBar.Title">
         <item name="android:textColor">@android:color/white</item>
-
     </style>
     <style name="ToolbarTitleTextAppearanceDark" parent="Base.TextAppearance.AppCompat.Widget.ActionBar.Title">
         <item name="android:textColor">@color/amber</item>
@@ -76,7 +75,7 @@
         color of thumb when inactive
         <item name="colorSwitchThumbNormal">@color/grey300</item>
         <!--Inactive track color-->
-        <item name="android:colorForeground">@color/grey600</item>
+        <item name="android:colorForeground">@color/primary_dark</item>
 
     </style>
 
