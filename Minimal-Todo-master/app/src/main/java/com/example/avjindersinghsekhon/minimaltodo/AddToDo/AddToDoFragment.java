@@ -277,6 +277,8 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
             @Override
             public void onTextChanged(CharSequence s, int i, int i1, int i2) {
                 mUserEnteredLink = s.toString();
+                //boolean to determine if link was clicked or not
+                mUserToDoItem.setLinkDeleted(false);
             }
 
             @Override
@@ -291,6 +293,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
             @Override
             public void onClick(View view) {
                 mToDoTextBodyLink.setText("");
+                mUserToDoItem.setLinkDeleted(true);
             }
         });
 
