@@ -71,7 +71,7 @@
                     android:orientation="horizontal">
 
                     <ImageButton
-                        android:id="@+id/userToDoReminderIconImageButton"
+                        android:id="@+id/userToDoReminderPriorityImage"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight=".4"
