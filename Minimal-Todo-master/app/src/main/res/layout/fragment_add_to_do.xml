@@ -86,22 +86,43 @@
                 android:layout_weight="1.5"
                 android:orientation="vertical">
 
-
-                <EditText
-                    android:id="@+id/userToDoLink"
+                <!-- Added this so that the pink cancel button
+                     is nested beside the link input box -->
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="60dp"
-                    android:layout_marginLeft="32dp"
-                    android:layout_marginRight="32dp"
-                    android:layout_weight="0"
-                    android:gravity="start|bottom"
-                    android:hint="Link"
-                    android:inputType="textMultiLine|textCapSentences"
-                    android:lines="2"
-                    android:maxLines="3"
-                    android:scrollbars="vertical"
-                    android:textColor="@color/icons" />
+                    android:layout_height="wrap_content">
 
+                    <!-- The Link Input Box -->
+                    <EditText
+                        android:id="@+id/userToDoLink"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="32dp"
+                        android:layout_marginRight="32dp"
+
+                        android:gravity="start|bottom"
+                        android:hint="Link"
+                        android:inputType="textMultiLine|textCapSentences"
+                        android:lines="2"
+                        android:maxLines="3"
+                        android:scrollbars="vertical"
+                        android:textColor="@color/icons" />
+
+                    <!-- The pink cancel button -->
+                    <ImageButton
+                        android:id="@+id/deleteLinkButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="60px"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:background="@android:color/transparent"
+                        android:scaleType="fitCenter"
+
+                        android:src="@drawable/new_link_cancel" />
+
+                </RelativeLayout>
+
+                <!-- Reminder Section -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
@@ -112,6 +133,7 @@
                     android:gravity="center"
                     android:orientation="horizontal">
 
+                    <!-- The Alarm reminder icon -->
                     <ImageButton
                         android:id="@+id/userToDoReminderIconImageButton"
                         android:layout_width="0dp"
@@ -121,6 +143,7 @@
                         android:padding="8dp"
                         android:src="@drawable/ic_add_alarm_grey_200_24dp" />
 
+                    <!-- Reminder Text -->
                     <TextView
                         android:id="@+id/userToDoRemindMeTextView"
                         android:layout_width="0dp"
@@ -135,6 +158,7 @@
                         android:textColor="@color/secondary_text"
                         android:textSize="16sp" />
 
+                    <!-- The reminder switch -->
                     <android.support.v7.widget.SwitchCompat
                         android:id="@+id/toDoHasDateSwitchCompat"
                         android:layout_width="0dp"
@@ -144,6 +168,7 @@
                         android:gravity="center"
                         android:padding="8dp" />
 
+                    <!-- The clipboard button -->
                     <Button
                         android:id="@+id/copyclipboard"
                         android:layout_width="0dp"
@@ -157,6 +182,7 @@
 
                 </LinearLayout>
 
+                
                 <LinearLayout
                     android:id="@+id/toDoEnterDateLinearLayout"
                     android:layout_width="match_parent"

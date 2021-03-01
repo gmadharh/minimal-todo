@@ -98,6 +98,8 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
     private String theme;
     AnalyticsApplication app;
 
+    private ImageButton deleteLink; //delete link button
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -152,7 +154,6 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 //            mLastEdited = mUserToDoItem.getLastEdited();
 //        }
 
-
         reminderIconImageButton = (ImageButton) view.findViewById(R.id.userToDoReminderIconImageButton);
         reminderRemindMeTextView = (TextView) view.findViewById(R.id.userToDoRemindMeTextView);
         if (theme.equals(MainFragment.DARKTHEME)) {
@@ -189,10 +190,6 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
                 Toast.makeText(getContext(), "Copied To Clipboard!", Toast.LENGTH_SHORT).show();
             }
         });
-
-
-
-
 
 
         mContainerLayout.setOnClickListener(new View.OnClickListener() {
@@ -269,6 +266,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
         Linkify.addLinks(mToDoTextBodyLink,Linkify.WEB_URLS);
         mToDoTextBodyLink.setText(mUserEnteredLink);
         mToDoTextBodyLink.setSelection(mToDoTextBodyLink.length());
+
         mToDoTextBodyLink.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -279,6 +277,8 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
             @Override
             public void onTextChanged(CharSequence s, int i, int i1, int i2) {
                 mUserEnteredLink = s.toString();
+                //boolean to determine if link was clicked or not
+                mUserToDoItem.setLinkDeleted(false);
             }
 
             @Override
@@ -286,6 +286,17 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
                 Linkify.addLinks(editable,Linkify.WEB_URLS);
             }
         });
+
+        /* Delete link button */
+        deleteLink = (ImageButton) view.findViewById(R.id.deleteLinkButton);
+        deleteLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mToDoTextBodyLink.setText("");
+                mUserToDoItem.setLinkDeleted(true);
+            }
+        });
+
 
 
 //        String lastSeen = formatDate(DATE_FORMAT, mLastEdited);

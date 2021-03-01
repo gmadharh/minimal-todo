@@ -79,6 +79,7 @@ public class TestTodoItem extends TestCase {
         ToDoItem originalItem = getToDoItem(REMINDER_OFF);
 
         try {
+
             JSONObject json = originalItem.toJSON();
             ToDoItem itemFromJson = new ToDoItem(json);
 
@@ -91,6 +92,10 @@ public class TestTodoItem extends TestCase {
 
         } catch (JSONException e) {
             fail("Exception thrown during test execution: " + e.getMessage());
+        }
+
+        if(originalItem.getLinkDeleted() == true) {
+            assertEquals(originalItem.getmLink(), "");
         }
     }
 
