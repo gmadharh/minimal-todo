@@ -29,6 +29,7 @@ public class ToDoItem implements Serializable {
     private static final String TODOCOLOR = "todocolor";
     private static final String TODODATE = "tododate";
     private static final String TODOIDENTIFIER = "todoidentifier";
+    private static final String TODOPRIORITY = "todopriority";
 
 
     public ToDoItem(String todoBody,String tododescription,String todoLink,boolean hasReminder, Date toDoDate,boolean hasPriority) {
@@ -50,6 +51,7 @@ public class ToDoItem implements Serializable {
         mHasReminder = jsonObject.getBoolean(TODOREMINDER);
         mTodoColor = jsonObject.getInt(TODOCOLOR);
         mLink = jsonObject.getString(TODOLINK);
+        mPriority = jsonObject.getBoolean(TODOPRIORITY);
 
         mTodoIdentifier = UUID.fromString(jsonObject.getString(TODOIDENTIFIER));
 

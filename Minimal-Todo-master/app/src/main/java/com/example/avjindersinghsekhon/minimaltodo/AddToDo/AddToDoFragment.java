@@ -327,13 +327,13 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
         /*
             This part deals with the listener for the high priority toggle
          */
+        mPrioSwitch.setChecked(mUserHasPriority);
         mPrioSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
 
                 // set the priority boolean to if the switch is checked or not
                 mUserHasPriority = isChecked;
-
 
             }
         });
