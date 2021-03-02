@@ -515,7 +515,13 @@ public class MainFragment extends AppDefaultFragment {
                 holder.mTimeTextView.setVisibility(View.GONE);
                 holder.mToDoTextview.setMaxLines(2);
             }
-            holder.mToDoTextview.setText(item.getToDoText());
+            if(item.isPriority())
+            {
+                holder.mToDoTextview.setText(item.getToDoText() + new String(Character.toChars(0x2757)));
+            }
+            else {
+                holder.mToDoTextview.setText(item.getToDoText());
+            }
             holder.mToDoTextview.setTextColor(todoTextColor);
 //            holder.mColorTextView.setBackgroundColor(Color.parseColor(item.getTodoColor()));
 

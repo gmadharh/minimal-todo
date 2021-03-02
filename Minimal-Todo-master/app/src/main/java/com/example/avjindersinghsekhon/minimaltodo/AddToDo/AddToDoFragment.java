@@ -324,6 +324,21 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
             }
         });
 
+        /*
+            This part deals with the listener for the high priority toggle
+         */
+        mPrioSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+
+                // set the priority boolean to if the switch is checked or not
+                mUserHasPriority = isChecked;
+
+
+            }
+        });
+
+
 
         mToDoSendFloatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -656,6 +671,8 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
             mUserReminderDate = calendar.getTime();
         }
         mUserToDoItem.setHasReminder(mUserHasReminder);
+        // set the priority field when making the task
+        mUserToDoItem.setPriority(mUserHasPriority);
         mUserToDoItem.setToDoDate(mUserReminderDate);
         mUserToDoItem.setTodoColor(mUserColor);
         i.putExtra(MainFragment.TODOITEM, mUserToDoItem);
