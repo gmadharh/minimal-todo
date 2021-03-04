@@ -18,7 +18,6 @@ public class ToDoItem implements Serializable {
     private boolean mPriority;
     // boolean for whether or not the link was deleted
     private Boolean mLinkDeleted;
->>>>>>> Minimal-Todo-master/app/src/main/java/com/example/avjindersinghsekhon/minimaltodo/Utility/ToDoItem.java
     //    private Date mLastEdited;
     private int mTodoColor;
     private Date mToDoDate;
