@@ -150,10 +150,10 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="2"
                         android:gravity="start"
-                        android:paddingBottom="8dp"
                         android:paddingLeft="8dp"
-                        android:paddingRight="8dp"
                         android:paddingTop="8dp"
+                        android:paddingRight="8dp"
+                        android:paddingBottom="8dp"
                         android:text="@string/remind_me"
                         android:textColor="@color/secondary_text"
                         android:textSize="16sp" />
@@ -182,7 +182,54 @@
 
                 </LinearLayout>
 
-                
+                <!-- This is the part for high priority -->
+                <!-- Image button = Red Exclamation image-->
+                <!-- Text View = "High Priority"-->
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginLeft="36dp"
+                    android:layout_marginRight="36dp"
+                    android:layout_marginTop="30dp"
+                    android:layout_weight=".5"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <ImageButton
+                        android:id="@+id/userToDoReminderPriorityImage"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".4"
+                        android:background="@android:color/transparent"
+                        android:padding="8dp"
+                        android:src="@drawable/ic_prio_exclaimation" />
+
+                    <TextView
+                        android:id="@+id/userToDoReminderPrioText"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:gravity="start"
+                        android:paddingLeft="8dp"
+                        android:paddingTop="8dp"
+                        android:paddingRight="8dp"
+                        android:paddingBottom="8dp"
+                        android:text="@string/high_priority"
+                        android:textColor="@color/secondary_text"
+                        android:textSize="16sp" />
+
+                    <android.support.v7.widget.SwitchCompat
+                        android:id="@+id/toDoHasPrioSwitchCompat"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:padding="8dp" />
+
+                </LinearLayout>
+
                 <LinearLayout
                     android:id="@+id/toDoEnterDateLinearLayout"
                     android:layout_width="match_parent"

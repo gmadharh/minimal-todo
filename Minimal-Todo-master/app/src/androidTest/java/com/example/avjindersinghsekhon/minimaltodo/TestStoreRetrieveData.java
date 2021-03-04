@@ -56,7 +56,8 @@ public class TestStoreRetrieveData extends ActivityUnitTestCase<MainActivity> {
                     "",
                     "",
                     false,
-                    new Date()));
+                    new Date(),
+                    false));
         }
     }
 

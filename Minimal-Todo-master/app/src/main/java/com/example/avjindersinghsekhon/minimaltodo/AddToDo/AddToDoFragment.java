@@ -63,6 +63,9 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
     private EditText mToDoTextBodyDescription;
     private EditText mToDoTextBodyLink;
 
+    // priority switch
+    private SwitchCompat mPrioSwitch;
+
     private SwitchCompat mToDoDateSwitch;
     //    private TextView mLastSeenTextView;
     private LinearLayout mUserDateSpinnerContainingLinearLayout;
@@ -89,6 +92,9 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
     private String mUserEnteredDescription;
     private String mUserEnteredLink;
     private boolean mUserHasReminder;
+
+    // add field for getting priority
+    private boolean mUserHasPriority;
     private Toolbar mToolbar;
     private Date mUserReminderDate;
     private int mUserColor;
@@ -143,6 +149,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
         mUserEnteredLink = mUserToDoItem.getmLink();
         mUserEnteredDescription = mUserToDoItem.getmToDoDescription();
         mUserHasReminder = mUserToDoItem.hasReminder();
+        mUserHasPriority = mUserToDoItem.isPriority();
         mUserReminderDate = mUserToDoItem.getToDoDate();
         mUserColor = mUserToDoItem.getTodoColor();
 
@@ -170,6 +177,8 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
         mUserDateSpinnerContainingLinearLayout = (LinearLayout) view.findViewById(R.id.toDoEnterDateLinearLayout);
         mToDoTextBodyEditText = (EditText) view.findViewById(R.id.userToDoEditText);
         mToDoTextBodyLink = (EditText) view.findViewById(R.id.userToDoLink);
+        // get the switch compat for the priority toggle to add listener
+        mPrioSwitch = (SwitchCompat) view.findViewById(R.id.toDoHasPrioSwitchCompat);
         mToDoTextBodyDescription= (EditText) view.findViewById(R.id.userToDoDescription);
         mToDoDateSwitch = (SwitchCompat) view.findViewById(R.id.toDoHasDateSwitchCompat);
 //        mLastSeenTextView = (TextView)findViewById(R.id.toDoLastEditedTextView);
@@ -325,6 +334,21 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
                 hideKeyboard(mToDoTextBodyDescription);
             }
         });
+
+        /*
+            This part deals with the listener for the high priority toggle
+         */
+        mPrioSwitch.setChecked(mUserHasPriority);
+        mPrioSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+
+                // set the priority boolean to if the switch is checked or not
+                mUserHasPriority = isChecked;
+
+            }
+        });
+
 
 
         mToDoSendFloatingActionButton.setOnClickListener(new View.OnClickListener() {
@@ -658,6 +682,8 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
             mUserReminderDate = calendar.getTime();
         }
         mUserToDoItem.setHasReminder(mUserHasReminder);
+        // set the priority field when making the task
+        mUserToDoItem.setPriority(mUserHasPriority);
         mUserToDoItem.setToDoDate(mUserReminderDate);
         mUserToDoItem.setTodoColor(mUserColor);
         i.putExtra(MainFragment.TODOITEM, mUserToDoItem);

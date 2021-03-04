@@ -14,7 +14,11 @@ public class ToDoItem implements Serializable {
     private String mToDoDescription;
     // add a link
     private String mLink;
+    // boolean for priority
+    private boolean mPriority;
+    // boolean for whether or not the link was deleted
     private Boolean mLinkDeleted;
+>>>>>>> Minimal-Todo-master/app/src/main/java/com/example/avjindersinghsekhon/minimaltodo/Utility/ToDoItem.java
     //    private Date mLastEdited;
     private int mTodoColor;
     private Date mToDoDate;
@@ -28,13 +32,15 @@ public class ToDoItem implements Serializable {
     private static final String TODOCOLOR = "todocolor";
     private static final String TODODATE = "tododate";
     private static final String TODOIDENTIFIER = "todoidentifier";
+    private static final String TODOPRIORITY = "todopriority";
 
 
-    public ToDoItem(String todoBody,String tododescription,String todoLink ,boolean hasReminder, Date toDoDate) {
+    public ToDoItem(String todoBody,String tododescription,String todoLink,boolean hasReminder, Date toDoDate,boolean hasPriority) {
         mToDoText = todoBody;
         mHasReminder = hasReminder;
         mToDoDate = toDoDate;
         mLink = todoLink;
+        mPriority = hasPriority;
         mToDoDescription = tododescription;
         mTodoColor = 1677725;
         mTodoIdentifier = UUID.randomUUID();
@@ -48,6 +54,7 @@ public class ToDoItem implements Serializable {
         mHasReminder = jsonObject.getBoolean(TODOREMINDER);
         mTodoColor = jsonObject.getInt(TODOCOLOR);
         mLink = jsonObject.getString(TODOLINK);
+        mPriority = jsonObject.getBoolean(TODOPRIORITY);
 
         mTodoIdentifier = UUID.fromString(jsonObject.getString(TODOIDENTIFIER));
 
@@ -65,6 +72,7 @@ public class ToDoItem implements Serializable {
         jsonObject.put(TODOREMINDER, mHasReminder);
         jsonObject.put(TODODESCRIPTION, mToDoDescription);
         jsonObject.put(TODOLINK,mLink);
+        jsonObject.put(TODOPRIORITY,mPriority);
 //        jsonObject.put(TODOLASTEDITED, mLastEdited.getTime());
         if (mToDoDate != null) {
             jsonObject.put(TODODATE, mToDoDate.getTime());
@@ -78,7 +86,7 @@ public class ToDoItem implements Serializable {
 
     // empty constructor which makes a default note with placeholder info
     public ToDoItem() {
-        this("Clean my room","Sweep and Mop my Room","www.google.com", true, new Date());
+        this("Clean my room","Sweep and Mop my Room","www.google.com", true, new Date(),false);
     }
 
     // getter for the description
@@ -117,6 +125,16 @@ public class ToDoItem implements Serializable {
     // setter for the task giving it a reminder
     public void setHasReminder(boolean mHasReminder) {
         this.mHasReminder = mHasReminder;
+    }
+
+    // getter for task high priority
+    public boolean isPriority() {
+        return mPriority;
+    }
+
+    // setter for setting high priority
+    public void setPriority(boolean mPriority) {
+        this.mPriority = mPriority;
     }
 
     // getter for the date

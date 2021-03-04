@@ -39,6 +39,8 @@ public class TestTodoItem extends TestCase {
     private final Date CURRENT_DATE = new Date();
     private final String TEXT_BODY = "This is some text";
     private final String TEXT_LINK = "www.google.com";
+    private final boolean PRIORITY_OFF = false;
+    private final boolean PRIORITY_ON = true;
     private final boolean REMINDER_OFF = false;
     private final boolean REMINDER_ON = true;
 
@@ -46,10 +48,12 @@ public class TestTodoItem extends TestCase {
       * Check we can construct a ToDoItem object using the three parameter constructor
       */
     public void testThreeParameterConstructor() {
-        ToDoItem toDoItem = getToDoItem(REMINDER_OFF);
+        ToDoItem toDoItem = getToDoItem(REMINDER_OFF,PRIORITY_OFF);
         assertEquals(TEXT_BODY, toDoItem.getToDoText());
         assertEquals(REMINDER_OFF, toDoItem.hasReminder());
         assertEquals(CURRENT_DATE, toDoItem.getToDoDate());
+        // assert if the priority is off, when we set it to off in the constructor
+        assertEquals(PRIORITY_OFF, toDoItem.isPriority());
     }
 
      /**
@@ -57,7 +61,7 @@ public class TestTodoItem extends TestCase {
       * Added an assert here for testing if the link is written to the JSON
       */
     public void testObjectMarshallingToJson() {
-        ToDoItem toDoItem = getToDoItem(REMINDER_ON);
+        ToDoItem toDoItem = getToDoItem(REMINDER_ON,PRIORITY_ON);
 
         try {
             JSONObject json = toDoItem.toJSON();
@@ -65,6 +69,8 @@ public class TestTodoItem extends TestCase {
             assertEquals(REMINDER_ON, json.getBoolean("todoreminder"));
             // testing if the link was written to the json
             assertEquals(TEXT_LINK,json.getString("todolink"));
+            // testing if the priority was written to the json, when its set to on
+            assertEquals(PRIORITY_ON,json.getBoolean("todopriority"));
             assertEquals(String.valueOf(CURRENT_DATE.getTime()), json.getString("tododate"));
         } catch (JSONException e) {
             fail("Exception thrown during test execution: " + e.getMessage());
@@ -76,7 +82,7 @@ public class TestTodoItem extends TestCase {
      * Added an assert here to test if the link can be retrieved from the JSON into a ToDoItem object
     */
     public void testObjectUnmarshallingFromJson() {
-        ToDoItem originalItem = getToDoItem(REMINDER_OFF);
+        ToDoItem originalItem = getToDoItem(REMINDER_OFF,PRIORITY_OFF);
 
         try {
 
@@ -86,6 +92,8 @@ public class TestTodoItem extends TestCase {
             assertEquals(originalItem.getToDoText(), itemFromJson.getToDoText());
             // testing if the link retrieved matches the one in the object
             assertEquals(originalItem.getmLink(),itemFromJson.getmLink());
+            // testing if the priority boolean retrieved matches the one in the object, which is off
+            assertEquals(originalItem.isPriority(),itemFromJson.isPriority());
             assertEquals(originalItem.getToDoDate(), itemFromJson.getToDoDate());
             assertEquals(originalItem.hasReminder(), itemFromJson.hasReminder());
             assertEquals(originalItem.getIdentifier(), itemFromJson.getIdentifier());
@@ -99,7 +107,7 @@ public class TestTodoItem extends TestCase {
         }
     }
 
-    private ToDoItem getToDoItem(boolean hasReminder) {
-        return new ToDoItem(TEXT_BODY,TEXT_BODY,TEXT_LINK,hasReminder, CURRENT_DATE);
+    private ToDoItem getToDoItem(boolean hasReminder,boolean hasPriority) {
+        return new ToDoItem(TEXT_BODY,TEXT_BODY,TEXT_LINK,hasReminder, CURRENT_DATE,hasPriority);
     }
 }
