@@ -16,6 +16,9 @@ public class ToDoItem implements Serializable {
     private String mLink;
     // boolean for priority
     private boolean mPriority;
+    // boolean for whether or not the link was deleted
+    private Boolean mLinkDeleted;
+>>>>>>> Minimal-Todo-master/app/src/main/java/com/example/avjindersinghsekhon/minimaltodo/Utility/ToDoItem.java
     //    private Date mLastEdited;
     private int mTodoColor;
     private Date mToDoDate;
@@ -107,6 +110,12 @@ public class ToDoItem implements Serializable {
 
     // setter for the link
     public void setmLink(String todoLink){this.mLink = todoLink;}
+
+    //getter for delete link button status
+    public boolean getLinkDeleted(){return mLinkDeleted;}
+
+    //getter for delete link button status
+    public void setLinkDeleted(boolean status){this.mLinkDeleted = status;}
 
     // getter for if the task has a reminder
     public boolean hasReminder() {
