@@ -9,6 +9,8 @@ import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.RadioButton;
 
 import com.example.avjindersinghsekhon.minimaltodo.Analytics.AnalyticsApplication;
 import com.example.avjindersinghsekhon.minimaltodo.Main.MainFragment;
@@ -65,6 +67,46 @@ public class SettingsActivity extends AppCompatActivity {
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    public void onThemeButtonClicked(View view) {
+        // Check if the button has been checked
+        boolean checked = ((RadioButton) view).isChecked();
+
+        // Check which radio button was clicked
+        switch(view.getId()) {
+            case R.id.themeRed:
+                if (checked) {
+                    //set theme to red
+                }
+                break;
+            case R.id.themeYellow:
+                if (checked) {
+                    //set theme to yellow
+                }
+                break;
+            case R.id.themeGreen:
+                if (checked) {
+                    //set theme to green
+
+                }
+                break;
+            case R.id.themeBlue:
+                if (checked) {
+                    //set theme to blue
+                }
+                break;
+            case R.id.themePink:
+                if (checked) {
+                    //set theme to pink
+                }
+                break;
+            case R.id.themeGrey:
+                if (checked) {
+                    //set theme to grey
+                }
+                break;
         }
     }
 }
