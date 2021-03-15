@@ -1,89 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    >
 
-    <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
-        android:minHeight="?attr/actionBarSize"
-        tools:ignore="MissingPrefix">
+    <android.support.v7.widget.Toolbar xmlns:tools="http://schemas.android.com/tools"
+                                       tools:ignore="MissingPrefix"
+                                       xmlns:android="http://schemas.android.com/apk/res/android"
+                                       android:id="@+id/toolbar"
+                                       android:minHeight="?attr/actionBarSize"
+                                       android:background="?attr/colorPrimary"
+                                       android:layout_width="match_parent"
+                                       android:layout_height="wrap_content">
 
 
     </android.support.v7.widget.Toolbar>
 
     <LinearLayout
-        android:id="@+id/mycontent1"
-        android:layout_width="match_parent"
-        android:layout_height="217dp"
-        android:layout_below="@id/toolbar"
-        android:layout_marginTop="16dp"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="\tTheme:"
-            android:textSize="20dp" />
-
-        <RadioGroup
-            android:layout_width="match_parent"
-            android:layout_height="217dp">
-
-            <RadioButton
-                android:id="@+id/themeRed"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Red"
-                android:onClick="onThemeButtonClicked"/>
-
-            <RadioButton
-                android:id="@+id/themeYellow"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Yellow"
-                android:onClick="onThemeButtonClicked"/>
-
-            <RadioButton
-                android:id="@+id/themeGreen"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Green"
-                android:onClick="onThemeButtonClicked"/>
-
-            <RadioButton
-                android:id="@+id/themeBlue"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Blue"
-                android:onClick="onThemeButtonClicked"/>
-
-            <RadioButton
-                android:id="@+id/themePink"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Pink"
-                android:onClick="onThemeButtonClicked"/>
-
-            <RadioButton
-                android:id="@+id/themeGrey"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Grey (Colourblind)"
-                android:onClick="onThemeButtonClicked"/>
-        </RadioGroup>
-    </LinearLayout>
-
-    <LinearLayout
+        android:orientation="vertical"
         android:id="@+id/mycontent"
-        android:layout_width="match_parent"
-        android:layout_height="413dp"
         android:layout_below="@id/toolbar"
-        android:layout_marginTop="262dp"
-        android:orientation="vertical"></LinearLayout>
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
 </RelativeLayout>
