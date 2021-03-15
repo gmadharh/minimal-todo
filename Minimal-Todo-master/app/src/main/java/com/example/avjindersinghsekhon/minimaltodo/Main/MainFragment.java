@@ -87,6 +87,10 @@ public class MainFragment extends AppDefaultFragment {
     };
 
 
+//    New variable here
+private FloatingActionButton mCategoryFAB;
+
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -179,6 +183,27 @@ public class MainFragment extends AppDefaultFragment {
                 startActivityForResult(newTodo, REQUEST_ID_TODO_ITEM);
             }
         });
+
+
+//        Start new category button here
+
+        mCategoryFAB = (FloatingActionButton) view.findViewById(R.id.addCategoryFAB);
+
+        mCategoryFAB.setOnClickListener(new View.OnClickListener() {
+
+            @SuppressWarnings("deprecation")
+            @Override
+            public void onClick(View v) {
+                app.send(this, "Action", "FAB pressed");
+
+            }
+        });
+
+
+//        End new category button here
+
+
+
 
 
 //        mRecyclerView = (RecyclerView)findViewById(R.id.toDoRecyclerView);
