@@ -62,6 +62,19 @@
 
             />
 
+         <!--Added new button for the folder-->
+        <android.support.design.widget.FloatingActionButton
+            android:src="@drawable/folder"
+            android:id="@+id/addCategoryFAB"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            app:layout_anchor="@id/myCoordinatorLayout"
+            app:layout_anchorGravity="bottom|left|end"
+
+            />
+
+
 
     </android.support.design.widget.CoordinatorLayout>
 </LinearLayout>
