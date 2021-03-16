@@ -11,6 +11,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -55,6 +56,7 @@ import static android.content.Context.ALARM_SERVICE;
 import static android.content.Context.MODE_PRIVATE;
 
 public class MainFragment extends AppDefaultFragment {
+
     private RecyclerViewEmptySupport mRecyclerView;
     private FloatingActionButton mAddToDoItemFAB;
     private ArrayList<ToDoItem> mToDoItemsArrayList;
@@ -191,10 +193,11 @@ private FloatingActionButton mCategoryFAB;
 
         mCategoryFAB.setOnClickListener(new View.OnClickListener() {
 
-            @SuppressWarnings("deprecation")
+//            @SuppressWarnings("deprecation")
             @Override
             public void onClick(View v) {
-                app.send(this, "Action", "FAB pressed");
+                //app.send(this, "Action", "FAB pressed");
+                openDialog();
 
             }
         });
@@ -246,6 +249,13 @@ private FloatingActionButton mCategoryFAB;
 
 
     }
+
+//    Added New Dialog Method
+    public void openDialog() {
+        Dialog dialog = new Dialog();
+        dialog.show(getActivity().getSupportFragmentManager(), "dialog");
+    }
+// End
 
     public static ArrayList<ToDoItem> getLocallyStoredData(StoreRetrieveData storeRetrieveData) {
         ArrayList<ToDoItem> items = null;
