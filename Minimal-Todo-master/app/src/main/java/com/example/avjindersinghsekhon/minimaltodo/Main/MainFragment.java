@@ -61,7 +61,6 @@ public class MainFragment extends AppDefaultFragment {
 
     private RecyclerViewEmptySupport mRecyclerView;
     private FloatingActionButton mAddToDoItemFAB;
-    private Dialog dialog;
     private ArrayList<TaskItem> mToDoItemsArrayList;
     private CoordinatorLayout mCoordLayout;
     public static final String TODOITEM = "com.avjindersinghsekhon.com.avjindersinghsekhon.minimaltodo.MainActivity";
@@ -200,7 +199,12 @@ private FloatingActionButton mCategoryFAB;
             @Override
             public void onClick(View v) {
                 //app.send(this, "Action", "FAB pressed");
-                openDialog();
+
+                Intent i = new Intent(getContext(),CustomDialogActivity.class);
+                CategoryItem cItem = new CategoryItem();
+                i.putExtra(TODOITEM,cItem);
+
+                startActivityForResult(i,REQUEST_ID_TODO_ITEM);
 
             }
         });
@@ -253,12 +257,6 @@ private FloatingActionButton mCategoryFAB;
 
     }
 
-//    Added New Dialog Method
-    public void openDialog() {
-        dialog = new Dialog();
-        dialog.show(getActivity().getSupportFragmentManager(), "dialog");
-    }
-// End
 
     public static ArrayList<TaskItem> getLocallyStoredData(StoreRetrieveData storeRetrieveData) {
         ArrayList<TaskItem> items = null;
@@ -403,30 +401,40 @@ private FloatingActionButton mCategoryFAB;
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode != RESULT_CANCELED && requestCode == REQUEST_ID_TODO_ITEM) {
-            ToDoItem item = (ToDoItem) data.getSerializableExtra(TODOITEM);
-            if (item.getToDoText().length() <= 0) {
-                return;
-            }
-            boolean existed = false;
 
-            if (item.hasReminder() && item.getToDoDate() != null) {
-                Intent i = new Intent(getContext(), TodoNotificationService.class);
-                i.putExtra(TodoNotificationService.TODOTEXT, item.getToDoText());
-                i.putExtra(TodoNotificationService.TODOUUID, item.getIdentifier());
-                createAlarm(i, item.getIdentifier().hashCode(), item.getToDoDate().getTime());
-//                Log.d("OskarSchindler", "Alarm Created: "+item.getToDoText()+" at "+item.getToDoDate());
-            }
+            TaskItem item = (TaskItem) data.getSerializableExtra(TODOITEM);
 
-            for (int i = 0; i < mToDoItemsArrayList.size(); i++) {
-                if (item.getIdentifier().equals(mToDoItemsArrayList.get(i).getIdentifier())) {
-                    mToDoItemsArrayList.set(i, item);
-                    existed = true;
-                    adapter.notifyDataSetChanged();
-                    break;
+            if (item instanceof ToDoItem)
+            {
+                if (((ToDoItem) item).getToDoText().length() <= 0) {
+                    return;
                 }
+                boolean existed = false;
+
+                if (((ToDoItem) item).hasReminder() && ((ToDoItem) item).getToDoDate() != null) {
+                    Intent i = new Intent(getContext(), TodoNotificationService.class);
+                    i.putExtra(TodoNotificationService.TODOTEXT, ((ToDoItem) item).getToDoText());
+                    i.putExtra(TodoNotificationService.TODOUUID, item.getIdentifier());
+                    createAlarm(i, item.getIdentifier().hashCode(), ((ToDoItem) item).getToDoDate().getTime());
+//                Log.d("OskarSchindler", "Alarm Created: "+item.getToDoText()+" at "+item.getToDoDate());
+                }
+
+                for (int i = 0; i < mToDoItemsArrayList.size(); i++) {
+                    if (item.getIdentifier().equals(mToDoItemsArrayList.get(i).getIdentifier())) {
+                        mToDoItemsArrayList.set(i, item);
+                        existed = true;
+                        adapter.notifyDataSetChanged();
+                        break;
+                    }
+                }
+                if (!existed) {
+                    addToDataStore((ToDoItem) item);
+                }
+
             }
-            if (!existed) {
-                addToDataStore(item);
+            else if (item instanceof CategoryItem)
+            {
+
             }
 
 
