@@ -3,11 +3,10 @@ package com.example.avjindersinghsekhon.minimaltodo.Utility;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
 
-public class ToDoItem implements Serializable {
+public class ToDoItem extends TaskItem {
     private String mToDoText;
     private boolean mHasReminder;
     //add description
@@ -33,6 +32,9 @@ public class ToDoItem implements Serializable {
     private static final String TODOIDENTIFIER = "todoidentifier";
     private static final String TODOPRIORITY = "todopriority";
 
+    private static final String ITEMTYPE = "itemtype";
+    private final String TASKTYPE = "task";
+
 
     public ToDoItem(String todoBody,String tododescription,String todoLink,boolean hasReminder, Date toDoDate,boolean hasPriority) {
         mToDoText = todoBody;
@@ -45,7 +47,7 @@ public class ToDoItem implements Serializable {
         mTodoIdentifier = UUID.randomUUID();
     }
 
-    // constructor which takes in a jsonObject
+/*    // constructor which takes in a jsonObject
     // used for writing to file?
     public ToDoItem(JSONObject jsonObject) throws JSONException {
         mToDoText = jsonObject.getString(TODOTEXT);
@@ -63,8 +65,15 @@ public class ToDoItem implements Serializable {
         if (jsonObject.has(TODODATE)) {
             mToDoDate = new Date(jsonObject.getLong(TODODATE));
         }
+    }*/
+
+    // setter for title
+    @Override
+    public void setTitle(String mToDoText) {
+        this.mToDoText = mToDoText;
     }
 
+    @Override
     public JSONObject toJSON() throws JSONException {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(TODOTEXT, mToDoText);
@@ -78,8 +87,30 @@ public class ToDoItem implements Serializable {
         }
         jsonObject.put(TODOCOLOR, mTodoColor);
         jsonObject.put(TODOIDENTIFIER, mTodoIdentifier.toString());
+        jsonObject.put(ITEMTYPE,TASKTYPE);
 
         return jsonObject;
+    }
+
+    @Override
+    public void jsonToItem(JSONObject jsonObject) throws JSONException {
+
+        mToDoText = jsonObject.getString(TODOTEXT);
+        mToDoDescription = jsonObject.getString(TODODESCRIPTION);
+        mHasReminder = jsonObject.getBoolean(TODOREMINDER);
+        mTodoColor = jsonObject.getInt(TODOCOLOR);
+        mLink = jsonObject.getString(TODOLINK);
+        mPriority = jsonObject.getBoolean(TODOPRIORITY);
+
+        mTodoIdentifier = UUID.fromString(jsonObject.getString(TODOIDENTIFIER));
+
+//        if(jsonObject.has(TODOLASTEDITED)){
+//            mLastEdited = new Date(jsonObject.getLong(TODOLASTEDITED));
+//        }
+        if (jsonObject.has(TODODATE)) {
+            mToDoDate = new Date(jsonObject.getLong(TODODATE));
+        }
+
     }
 
 
@@ -97,11 +128,6 @@ public class ToDoItem implements Serializable {
     // getter for the title
     public String getToDoText() {
         return mToDoText;
-    }
-
-    // setter for the title
-    public void setToDoText(String mToDoText) {
-        this.mToDoText = mToDoText;
     }
 
     // getter for the link
