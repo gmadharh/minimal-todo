@@ -17,7 +17,7 @@
     </android.support.v7.widget.Toolbar>
 
     <LinearLayout
-        android:id="@+id/mycontent1"
+        android:id="@+id/themeSelection"
         android:layout_width="match_parent"
         android:layout_height="217dp"
         android:layout_below="@id/toolbar"
@@ -31,6 +31,7 @@
             android:textSize="20dp" />
 
         <RadioGroup
+            android:id="@+id/ThemeButtons"
             android:layout_width="match_parent"
             android:layout_height="217dp">
 
@@ -38,43 +39,43 @@
                 android:id="@+id/themeRed"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Red"
-                android:onClick="onThemeButtonClicked"/>
+                android:onClick="onThemeButtonClicked"
+                android:text="Red" />
 
             <RadioButton
                 android:id="@+id/themeYellow"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Yellow"
-                android:onClick="onThemeButtonClicked"/>
+                android:onClick="onThemeButtonClicked"
+                android:text="Yellow" />
 
             <RadioButton
                 android:id="@+id/themeGreen"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Green"
-                android:onClick="onThemeButtonClicked"/>
+                android:onClick="onThemeButtonClicked"
+                android:text="Green" />
 
             <RadioButton
                 android:id="@+id/themeBlue"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Blue"
-                android:onClick="onThemeButtonClicked"/>
+                android:onClick="onThemeButtonClicked"
+                android:text="Blue" />
 
             <RadioButton
                 android:id="@+id/themePink"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Pink"
-                android:onClick="onThemeButtonClicked"/>
+                android:onClick="onThemeButtonClicked"
+                android:text="Pink" />
 
             <RadioButton
                 android:id="@+id/themeGrey"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Grey (Colourblind)"
-                android:onClick="onThemeButtonClicked"/>
+                android:onClick="onThemeButtonClicked"
+                android:text="Grey (Colourblind)" />
         </RadioGroup>
     </LinearLayout>
 
