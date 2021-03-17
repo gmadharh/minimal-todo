@@ -27,7 +27,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
+        <activity android:name=".Main.CustomDialogActivity" />
         <activity android:name=".AddToDo.AddToDoActivity"
             android:screenOrientation="portrait"
             android:parentActivityName=".Main.MainActivity"

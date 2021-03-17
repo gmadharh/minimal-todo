@@ -38,9 +38,11 @@ import com.example.avjindersinghsekhon.minimaltodo.AppDefault.AppDefaultFragment
 import com.example.avjindersinghsekhon.minimaltodo.R;
 import com.example.avjindersinghsekhon.minimaltodo.Reminder.ReminderFragment;
 import com.example.avjindersinghsekhon.minimaltodo.Settings.SettingsActivity;
+import com.example.avjindersinghsekhon.minimaltodo.Utility.CategoryItem;
 import com.example.avjindersinghsekhon.minimaltodo.Utility.ItemTouchHelperClass;
 import com.example.avjindersinghsekhon.minimaltodo.Utility.RecyclerViewEmptySupport;
 import com.example.avjindersinghsekhon.minimaltodo.Utility.StoreRetrieveData;
+import com.example.avjindersinghsekhon.minimaltodo.Utility.TaskItem;
 import com.example.avjindersinghsekhon.minimaltodo.Utility.ToDoItem;
 import com.example.avjindersinghsekhon.minimaltodo.Utility.TodoNotificationService;
 
@@ -59,12 +61,13 @@ public class MainFragment extends AppDefaultFragment {
 
     private RecyclerViewEmptySupport mRecyclerView;
     private FloatingActionButton mAddToDoItemFAB;
-    private ArrayList<ToDoItem> mToDoItemsArrayList;
+    private ArrayList<TaskItem> mToDoItemsArrayList;
     private CoordinatorLayout mCoordLayout;
     public static final String TODOITEM = "com.avjindersinghsekhon.com.avjindersinghsekhon.minimaltodo.MainActivity";
     private MainFragment.BasicListAdapter adapter;
     private static final int REQUEST_ID_TODO_ITEM = 100;
-    private ToDoItem mJustDeletedToDoItem;
+    private static final int REQUEST_ID_CAT_ITEM = 101;
+    private TaskItem mJustDeletedToDoItem;
     private int mIndexOfDeletedToDoItem;
     public static final String DATE_TIME_FORMAT_12_HOUR = "MMM d, yyyy  h:mm a";
     public static final String DATE_TIME_FORMAT_24_HOUR = "MMM d, yyyy  k:mm";
@@ -197,7 +200,12 @@ private FloatingActionButton mCategoryFAB;
             @Override
             public void onClick(View v) {
                 //app.send(this, "Action", "FAB pressed");
-                openDialog();
+
+                Intent i = new Intent(getContext(),CustomDialogActivity.class);
+                CategoryItem cItem = new CategoryItem();
+                i.putExtra("category",cItem);
+
+                startActivityForResult(i,REQUEST_ID_CAT_ITEM);
 
             }
         });
@@ -250,15 +258,9 @@ private FloatingActionButton mCategoryFAB;
 
     }
 
-//    Added New Dialog Method
-    public void openDialog() {
-        Dialog dialog = new Dialog();
-        dialog.show(getActivity().getSupportFragmentManager(), "dialog");
-    }
-// End
 
-    public static ArrayList<ToDoItem> getLocallyStoredData(StoreRetrieveData storeRetrieveData) {
-        ArrayList<ToDoItem> items = null;
+    public static ArrayList<TaskItem> getLocallyStoredData(StoreRetrieveData storeRetrieveData) {
+        ArrayList<TaskItem> items = null;
 
         try {
             items = storeRetrieveData.loadFromFile();
@@ -330,17 +332,22 @@ private FloatingActionButton mCategoryFAB;
 
     private void setAlarms() {
         if (mToDoItemsArrayList != null) {
-            for (ToDoItem item : mToDoItemsArrayList) {
-                if (item.hasReminder() && item.getToDoDate() != null) {
-                    if (item.getToDoDate().before(new Date())) {
-                        item.setToDoDate(null);
-                        continue;
+            for (TaskItem item : mToDoItemsArrayList) {
+                if (item instanceof ToDoItem)
+                {
+                    if (((ToDoItem) item).hasReminder() && ((ToDoItem) item).getToDoDate() != null) {
+                        if (((ToDoItem) item).getToDoDate().before(new Date())) {
+                            ((ToDoItem) item).setToDoDate(null);
+                            continue;
+                        }
+                        Intent i = new Intent(getContext(), TodoNotificationService.class);
+                        i.putExtra(TodoNotificationService.TODOUUID, item.getIdentifier());
+                        i.putExtra(TodoNotificationService.TODOTEXT, ((ToDoItem) item).getToDoText());
+                        createAlarm(i, item.getIdentifier().hashCode(), ((ToDoItem) item).getToDoDate().getTime());
                     }
-                    Intent i = new Intent(getContext(), TodoNotificationService.class);
-                    i.putExtra(TodoNotificationService.TODOUUID, item.getIdentifier());
-                    i.putExtra(TodoNotificationService.TODOTEXT, item.getToDoText());
-                    createAlarm(i, item.getIdentifier().hashCode(), item.getToDoDate().getTime());
+
                 }
+
             }
         }
     }
@@ -395,19 +402,48 @@ private FloatingActionButton mCategoryFAB;
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode != RESULT_CANCELED && requestCode == REQUEST_ID_TODO_ITEM) {
-            ToDoItem item = (ToDoItem) data.getSerializableExtra(TODOITEM);
-            if (item.getToDoText().length() <= 0) {
+
+            TaskItem item = (TaskItem) data.getSerializableExtra(TODOITEM);
+
+            if (item instanceof ToDoItem)
+            {
+                if (((ToDoItem) item).getToDoText().length() <= 0) {
+                    return;
+                }
+                boolean existed = false;
+
+                if (((ToDoItem) item).hasReminder() && ((ToDoItem) item).getToDoDate() != null) {
+                    Intent i = new Intent(getContext(), TodoNotificationService.class);
+                    i.putExtra(TodoNotificationService.TODOTEXT, ((ToDoItem) item).getToDoText());
+                    i.putExtra(TodoNotificationService.TODOUUID, item.getIdentifier());
+                    createAlarm(i, item.getIdentifier().hashCode(), ((ToDoItem) item).getToDoDate().getTime());
+//                Log.d("OskarSchindler", "Alarm Created: "+item.getToDoText()+" at "+item.getToDoDate());
+                }
+
+                for (int i = 0; i < mToDoItemsArrayList.size(); i++) {
+                    if (item.getIdentifier().equals(mToDoItemsArrayList.get(i).getIdentifier())) {
+                        mToDoItemsArrayList.set(i, item);
+                        existed = true;
+                        adapter.notifyDataSetChanged();
+                        break;
+                    }
+                }
+                if (!existed) {
+                    addToDataStore(item);
+                }
+
+            }
+
+        }
+        else if (requestCode == REQUEST_ID_CAT_ITEM){
+
+            TaskItem item = (TaskItem) data.getSerializableExtra("category");
+
+            if (((CategoryItem) item).getTitle().length() <= 0)
+            {
                 return;
             }
             boolean existed = false;
-
-            if (item.hasReminder() && item.getToDoDate() != null) {
-                Intent i = new Intent(getContext(), TodoNotificationService.class);
-                i.putExtra(TodoNotificationService.TODOTEXT, item.getToDoText());
-                i.putExtra(TodoNotificationService.TODOUUID, item.getIdentifier());
-                createAlarm(i, item.getIdentifier().hashCode(), item.getToDoDate().getTime());
-//                Log.d("OskarSchindler", "Alarm Created: "+item.getToDoText()+" at "+item.getToDoDate());
-            }
 
             for (int i = 0; i < mToDoItemsArrayList.size(); i++) {
                 if (item.getIdentifier().equals(mToDoItemsArrayList.get(i).getIdentifier())) {
@@ -417,10 +453,10 @@ private FloatingActionButton mCategoryFAB;
                     break;
                 }
             }
-            if (!existed) {
+
+            if (!existed){
                 addToDataStore(item);
             }
-
 
         }
     }
@@ -450,7 +486,7 @@ private FloatingActionButton mCategoryFAB;
         }
     }
 
-    private void addToDataStore(ToDoItem item) {
+    private void addToDataStore(TaskItem item) {
         mToDoItemsArrayList.add(item);
         adapter.notifyItemInserted(mToDoItemsArrayList.size() - 1);
 
@@ -468,7 +504,7 @@ private FloatingActionButton mCategoryFAB;
     }
 
     public class BasicListAdapter extends RecyclerView.Adapter<BasicListAdapter.ViewHolder> implements ItemTouchHelperClass.ItemTouchHelperAdapter {
-        private ArrayList<ToDoItem> items;
+        private ArrayList<TaskItem> items;
 
         @Override
         public void onItemMoved(int fromPosition, int toPosition) {
@@ -505,11 +541,11 @@ private FloatingActionButton mCategoryFAB;
                             //Comment the line below if not using Google Analytics
                             app.send(this, "Action", "UNDO Pressed");
                             items.add(mIndexOfDeletedToDoItem, mJustDeletedToDoItem);
-                            if (mJustDeletedToDoItem.getToDoDate() != null && mJustDeletedToDoItem.hasReminder()) {
+                            if (((ToDoItem) mJustDeletedToDoItem).getToDoDate() != null && ((ToDoItem) mJustDeletedToDoItem).hasReminder()) {
                                 Intent i = new Intent(getContext(), TodoNotificationService.class);
-                                i.putExtra(TodoNotificationService.TODOTEXT, mJustDeletedToDoItem.getToDoText());
+                                i.putExtra(TodoNotificationService.TODOTEXT, ((ToDoItem) mJustDeletedToDoItem).getToDoText());
                                 i.putExtra(TodoNotificationService.TODOUUID, mJustDeletedToDoItem.getIdentifier());
-                                createAlarm(i, mJustDeletedToDoItem.getIdentifier().hashCode(), mJustDeletedToDoItem.getToDoDate().getTime());
+                                createAlarm(i, mJustDeletedToDoItem.getIdentifier().hashCode(), ((ToDoItem) mJustDeletedToDoItem).getToDoDate().getTime());
                             }
                             notifyItemInserted(mIndexOfDeletedToDoItem);
                         }
@@ -524,7 +560,7 @@ private FloatingActionButton mCategoryFAB;
 
         @Override
         public void onBindViewHolder(final BasicListAdapter.ViewHolder holder, final int position) {
-            ToDoItem item = items.get(position);
+            TaskItem item = items.get(position);
 //            if(item.getToDoDate()!=null && item.getToDoDate().before(new Date())){
 //                item.setToDoDate(null);
 //            }
@@ -542,50 +578,60 @@ private FloatingActionButton mCategoryFAB;
             }
             holder.linearLayout.setBackgroundColor(bgColor);
 
-            if (item.hasReminder() && item.getToDoDate() != null) {
-                holder.mToDoTextview.setMaxLines(1);
-                holder.mTimeTextView.setVisibility(View.VISIBLE);
-//                holder.mToDoTextview.setVisibility(View.GONE);
-            } else {
-                holder.mTimeTextView.setVisibility(View.GONE);
-                holder.mToDoTextview.setMaxLines(2);
-            }
-            if(item.isPriority())
+            if(item instanceof ToDoItem)
             {
-                holder.mToDoTextview.setText(item.getToDoText() + new String(Character.toChars(0x2757)));
-            }
-            else {
-                holder.mToDoTextview.setText(item.getToDoText());
-            }
-            holder.mToDoTextview.setTextColor(todoTextColor);
-//            holder.mColorTextView.setBackgroundColor(Color.parseColor(item.getTodoColor()));
-
-//            TextDrawable myDrawable = TextDrawable.builder().buildRoundRect(item.getToDoText().substring(0,1),Color.RED, 10);
-            //We check if holder.color is set or not
-//            if(item.getTodoColor() == null){
-//                ColorGenerator generator = ColorGenerator.MATERIAL;
-//                int color = generator.getRandomColor();
-//                item.setTodoColor(color+"");
-//            }
-//            Log.d("OskarSchindler", "Color: "+item.getTodoColor());
-            TextDrawable myDrawable = TextDrawable.builder().beginConfig()
-                    .textColor(Color.WHITE)
-                    .useFont(Typeface.DEFAULT)
-                    .toUpperCase()
-                    .endConfig()
-                    .buildRound(item.getToDoText().substring(0, 1), item.getTodoColor());
-
-//            TextDrawable myDrawable = TextDrawable.builder().buildRound(item.getToDoText().substring(0,1),holder.color);
-            holder.mColorImageView.setImageDrawable(myDrawable);
-            if (item.getToDoDate() != null) {
-                String timeToShow;
-                if (android.text.format.DateFormat.is24HourFormat(getContext())) {
-                    timeToShow = AddToDoFragment.formatDate(MainFragment.DATE_TIME_FORMAT_24_HOUR, item.getToDoDate());
+                if (((ToDoItem) item).hasReminder() && ((ToDoItem) item).getToDoDate() != null) {
+                    holder.mToDoTextview.setMaxLines(1);
+                    holder.mTimeTextView.setVisibility(View.VISIBLE);
+//                holder.mToDoTextview.setVisibility(View.GONE);
                 } else {
-                    timeToShow = AddToDoFragment.formatDate(MainFragment.DATE_TIME_FORMAT_12_HOUR, item.getToDoDate());
+                    holder.mTimeTextView.setVisibility(View.GONE);
+                    holder.mToDoTextview.setMaxLines(2);
                 }
-                holder.mTimeTextView.setText(timeToShow);
+
+                if(((ToDoItem) item).isPriority())
+                {
+                    holder.mToDoTextview.setText(((ToDoItem) item).getToDoText() + new String(Character.toChars(0x2757)));
+                }
+                else {
+                    holder.mToDoTextview.setText(((ToDoItem) item).getToDoText());
+                }
+                holder.mToDoTextview.setTextColor(todoTextColor);
+//              holder.mColorTextView.setBackgroundColor(Color.parseColor(item.getTodoColor()));
+
+//              TextDrawable myDrawable = TextDrawable.builder().buildRoundRect(item.getToDoText().substring(0,1),Color.RED, 10);
+                //We check if holder.color is set or not
+//              if(item.getTodoColor() == null){
+//                  ColorGenerator generator = ColorGenerator.MATERIAL;
+//                  int color = generator.getRandomColor();
+//                  item.setTodoColor(color+"");
+//              }
+//              Log.d("OskarSchindler", "Color: "+item.getTodoColor());
+                TextDrawable myDrawable = TextDrawable.builder().beginConfig()
+                        .textColor(Color.WHITE)
+                        .useFont(Typeface.DEFAULT)
+                        .toUpperCase()
+                        .endConfig()
+                        .buildRound(((ToDoItem) item).getToDoText().substring(0, 1), ((ToDoItem) item).getTodoColor());
+
+//              TextDrawable myDrawable = TextDrawable.builder().buildRound(item.getToDoText().substring(0,1),holder.color);
+                holder.mColorImageView.setImageDrawable(myDrawable);
+                if (((ToDoItem) item).getToDoDate() != null) {
+                    String timeToShow;
+                    if (android.text.format.DateFormat.is24HourFormat(getContext())) {
+                        timeToShow = AddToDoFragment.formatDate(MainFragment.DATE_TIME_FORMAT_24_HOUR, ((ToDoItem) item).getToDoDate());
+                    } else {
+                        timeToShow = AddToDoFragment.formatDate(MainFragment.DATE_TIME_FORMAT_12_HOUR, ((ToDoItem) item).getToDoDate());
+                    }
+                    holder.mTimeTextView.setText(timeToShow);
+                }
+
             }
+            else if (item instanceof CategoryItem){
+
+            }
+
+
 
 
         }
@@ -595,7 +641,7 @@ private FloatingActionButton mCategoryFAB;
             return items.size();
         }
 
-        BasicListAdapter(ArrayList<ToDoItem> items) {
+        BasicListAdapter(ArrayList<TaskItem> items) {
 
             this.items = items;
         }
@@ -618,10 +664,20 @@ private FloatingActionButton mCategoryFAB;
                 v.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ToDoItem item = items.get(ViewHolder.this.getAdapterPosition());
-                        Intent i = new Intent(getContext(), AddToDoActivity.class);
-                        i.putExtra(TODOITEM, item);
-                        startActivityForResult(i, REQUEST_ID_TODO_ITEM);
+                        TaskItem item = items.get(ViewHolder.this.getAdapterPosition());
+
+                        if(item instanceof ToDoItem){
+                            Intent i = new Intent(getContext(), AddToDoActivity.class);
+                            i.putExtra(TODOITEM, item);
+                            startActivityForResult(i, REQUEST_ID_TODO_ITEM);
+                        }
+                        /*
+                        else if(item instanceof CategoryItem){
+                            Intent i = new Intent(getContext(),CustomDialogActivity.class);
+                            i.putExtra("category",item);
+                            startActivityForResult(i,REQUEST_ID_CAT_ITEM);
+                        }
+                         */
                     }
                 });
                 mToDoTextview = (TextView) v.findViewById(R.id.toDoListItemTextview);
