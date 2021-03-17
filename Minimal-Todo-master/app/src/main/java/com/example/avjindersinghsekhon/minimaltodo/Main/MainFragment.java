@@ -66,6 +66,7 @@ public class MainFragment extends AppDefaultFragment {
     public static final String TODOITEM = "com.avjindersinghsekhon.com.avjindersinghsekhon.minimaltodo.MainActivity";
     private MainFragment.BasicListAdapter adapter;
     private static final int REQUEST_ID_TODO_ITEM = 100;
+    private static final int REQUEST_ID_CAT_ITEM = 101;
     private TaskItem mJustDeletedToDoItem;
     private int mIndexOfDeletedToDoItem;
     public static final String DATE_TIME_FORMAT_12_HOUR = "MMM d, yyyy  h:mm a";
@@ -202,9 +203,9 @@ private FloatingActionButton mCategoryFAB;
 
                 Intent i = new Intent(getContext(),CustomDialogActivity.class);
                 CategoryItem cItem = new CategoryItem();
-                i.putExtra(TODOITEM,cItem);
+                i.putExtra("category",cItem);
 
-                startActivityForResult(i,REQUEST_ID_TODO_ITEM);
+                startActivityForResult(i,REQUEST_ID_CAT_ITEM);
 
             }
         });
@@ -428,15 +429,34 @@ private FloatingActionButton mCategoryFAB;
                     }
                 }
                 if (!existed) {
-                    addToDataStore((ToDoItem) item);
+                    addToDataStore(item);
                 }
 
             }
-            else if (item instanceof CategoryItem)
-            {
 
+        }
+        else if (requestCode == REQUEST_ID_CAT_ITEM){
+
+            TaskItem item = (TaskItem) data.getSerializableExtra("category");
+
+            if (((CategoryItem) item).getTitle().length() <= 0)
+            {
+                return;
+            }
+            boolean existed = false;
+
+            for (int i = 0; i < mToDoItemsArrayList.size(); i++) {
+                if (item.getIdentifier().equals(mToDoItemsArrayList.get(i).getIdentifier())) {
+                    mToDoItemsArrayList.set(i, item);
+                    existed = true;
+                    adapter.notifyDataSetChanged();
+                    break;
+                }
             }
 
+            if (!existed){
+                addToDataStore(item);
+            }
 
         }
     }
@@ -466,7 +486,7 @@ private FloatingActionButton mCategoryFAB;
         }
     }
 
-    private void addToDataStore(ToDoItem item) {
+    private void addToDataStore(TaskItem item) {
         mToDoItemsArrayList.add(item);
         adapter.notifyItemInserted(mToDoItemsArrayList.size() - 1);
 
@@ -607,6 +627,9 @@ private FloatingActionButton mCategoryFAB;
                 }
 
             }
+            else if (item instanceof CategoryItem){
+
+            }
 
 
 
@@ -642,9 +665,19 @@ private FloatingActionButton mCategoryFAB;
                     @Override
                     public void onClick(View v) {
                         TaskItem item = items.get(ViewHolder.this.getAdapterPosition());
-                        Intent i = new Intent(getContext(), AddToDoActivity.class);
-                        i.putExtra(TODOITEM, item);
-                        startActivityForResult(i, REQUEST_ID_TODO_ITEM);
+
+                        if(item instanceof ToDoItem){
+                            Intent i = new Intent(getContext(), AddToDoActivity.class);
+                            i.putExtra(TODOITEM, item);
+                            startActivityForResult(i, REQUEST_ID_TODO_ITEM);
+                        }
+                        /*
+                        else if(item instanceof CategoryItem){
+                            Intent i = new Intent(getContext(),CustomDialogActivity.class);
+                            i.putExtra("category",item);
+                            startActivityForResult(i,REQUEST_ID_CAT_ITEM);
+                        }
+                         */
                     }
                 });
                 mToDoTextview = (TextView) v.findViewById(R.id.toDoListItemTextview);

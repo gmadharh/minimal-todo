@@ -65,12 +65,14 @@ public class StoreRetrieveData {
 
                 if (jsonArray.getJSONObject(i).getString("itemtype").equals("category"))
                 {
+                    System.out.println("LOADED CATEGORY ITEM FROM FILE");
                     item = new CategoryItem();
                     item.jsonToItem(jsonArray.getJSONObject(i));
 
                 }
                 else if(jsonArray.getJSONObject(i).getString("itemtype").equals("task"))
                 {
+                    System.out.println("LOADED TASK ITEM FROM FILE");
                     item = new ToDoItem();
                     item.jsonToItem(jsonArray.getJSONObject(i));
                 }
