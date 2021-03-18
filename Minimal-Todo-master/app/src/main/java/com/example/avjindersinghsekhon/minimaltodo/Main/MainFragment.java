@@ -594,6 +594,8 @@ private FloatingActionButton mCategoryFAB;
 
                 if(((ToDoItem) item).isPriority()) {
                     holder.mToDoTextview.setText(((ToDoItem) item).getToDoText() + new String(Character.toChars(0x2757)));
+
+
                 }
                 else {
                     holder.mToDoTextview.setText(((ToDoItem) item).getToDoText());
@@ -631,20 +633,9 @@ private FloatingActionButton mCategoryFAB;
 
             }
             else if (item instanceof CategoryItem){
-                File folderimage = new File("C:/Users/Daniel/Documents/3760/3760REAL/cis3760-section2-group6/Minimal-Todo-master/app/src/main/res/drawable-xxxhdpi/folder.png");
+                CategoryItem categoryItem;
+                holder.mToDoTextview.setText(((CategoryItem) item).getTitle());
 
-
-
-                if(folderimage.exists()){
-
-
-                    Bitmap myBitmap = BitmapFactory.decodeFile(folderimage.getAbsolutePath());
-
-                    ImageView myImage = holder.mColorImageViewCategory;
-
-                    myImage.setImageBitmap(myBitmap);
-
-                }
 
             }
 
@@ -673,7 +664,6 @@ private FloatingActionButton mCategoryFAB;
             TextView mToDoTextview;
             //            TextView mColorTextView;
             ImageView mColorImageView;
-            ImageView mColorImageViewCategory;
             TextView mTimeTextView;
 //            int color = -1;
 
@@ -704,7 +694,6 @@ private FloatingActionButton mCategoryFAB;
                 mTimeTextView = (TextView) v.findViewById(R.id.todoListItemTimeTextView);
 //                mColorTextView = (TextView)v.findViewById(R.id.toDoColorTextView);
                 mColorImageView = (ImageView) v.findViewById(R.id.toDoListItemColorImageView);
-                mColorImageViewCategory = (ImageView) v.findViewById((R.id.toDoListItemColorImageView)) ;
 
                 linearLayout = (LinearLayout) v.findViewById(R.id.listItemLinearLayout);
 
