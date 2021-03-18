@@ -79,7 +79,7 @@ public class CustomDialogFragment extends AppDefaultFragment {
     protected int layoutRes() {
         return R.layout.fragment_dialog;
     }
-
+    //Makes category
     public void makeResult(int result){
         Intent i = new Intent();
 

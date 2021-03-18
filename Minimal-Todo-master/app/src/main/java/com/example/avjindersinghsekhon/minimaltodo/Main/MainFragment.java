@@ -4,6 +4,8 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -48,6 +50,7 @@ import com.example.avjindersinghsekhon.minimaltodo.Utility.TodoNotificationServi
 
 import org.json.JSONException;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -589,8 +592,7 @@ private FloatingActionButton mCategoryFAB;
                     holder.mToDoTextview.setMaxLines(2);
                 }
 
-                if(((ToDoItem) item).isPriority())
-                {
+                if(((ToDoItem) item).isPriority()) {
                     holder.mToDoTextview.setText(((ToDoItem) item).getToDoText() + new String(Character.toChars(0x2757)));
                 }
                 else {
@@ -626,8 +628,23 @@ private FloatingActionButton mCategoryFAB;
                     holder.mTimeTextView.setText(timeToShow);
                 }
 
+
             }
             else if (item instanceof CategoryItem){
+                File folderimage = new File("C:/Users/Daniel/Documents/3760/3760REAL/cis3760-section2-group6/Minimal-Todo-master/app/src/main/res/drawable-xxxhdpi/folder.png");
+
+
+
+                if(folderimage.exists()){
+
+
+                    Bitmap myBitmap = BitmapFactory.decodeFile(folderimage.getAbsolutePath());
+
+                    ImageView myImage = holder.mColorImageViewCategory;
+
+                    myImage.setImageBitmap(myBitmap);
+
+                }
 
             }
 
@@ -649,15 +666,18 @@ private FloatingActionButton mCategoryFAB;
 
         @SuppressWarnings("deprecation")
         public class ViewHolder extends RecyclerView.ViewHolder {
+            //create image of folder icon
 
             View mView;
             LinearLayout linearLayout;
             TextView mToDoTextview;
             //            TextView mColorTextView;
             ImageView mColorImageView;
+            ImageView mColorImageViewCategory;
             TextView mTimeTextView;
 //            int color = -1;
 
+            //Brings up already created task form
             public ViewHolder(View v) {
                 super(v);
                 mView = v;
@@ -684,7 +704,11 @@ private FloatingActionButton mCategoryFAB;
                 mTimeTextView = (TextView) v.findViewById(R.id.todoListItemTimeTextView);
 //                mColorTextView = (TextView)v.findViewById(R.id.toDoColorTextView);
                 mColorImageView = (ImageView) v.findViewById(R.id.toDoListItemColorImageView);
+                mColorImageViewCategory = (ImageView) v.findViewById((R.id.toDoListItemColorImageView)) ;
+
                 linearLayout = (LinearLayout) v.findViewById(R.id.listItemLinearLayout);
+
+
             }
 
 
