@@ -633,6 +633,7 @@ private FloatingActionButton mCategoryFAB;
 
             }
             else if (item instanceof CategoryItem){
+                //set category title once CategoryItem is created
                 CategoryItem categoryItem;
                 holder.mToDoTextview.setText(((CategoryItem) item).getTitle());
 
