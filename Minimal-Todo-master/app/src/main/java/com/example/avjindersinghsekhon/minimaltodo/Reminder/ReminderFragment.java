@@ -21,6 +21,7 @@ import com.example.avjindersinghsekhon.minimaltodo.Main.MainActivity;
 import com.example.avjindersinghsekhon.minimaltodo.Main.MainFragment;
 import com.example.avjindersinghsekhon.minimaltodo.R;
 import com.example.avjindersinghsekhon.minimaltodo.Utility.StoreRetrieveData;
+import com.example.avjindersinghsekhon.minimaltodo.Utility.TaskItem;
 import com.example.avjindersinghsekhon.minimaltodo.Utility.ToDoItem;
 import com.example.avjindersinghsekhon.minimaltodo.Utility.TodoNotificationService;
 
@@ -42,7 +43,7 @@ public class ReminderFragment extends AppDefaultFragment {
     private MaterialSpinner mSnoozeSpinner;
     private String[] snoozeOptionsArray;
     private StoreRetrieveData storeRetrieveData;
-    private ArrayList<ToDoItem> mToDoItems;
+    private ArrayList<TaskItem> mToDoItems;
     private ToDoItem mItem;
     public static final String EXIT = "com.avjindersekhon.exit";
     private TextView mSnoozeTextView;
@@ -70,9 +71,9 @@ public class ReminderFragment extends AppDefaultFragment {
         Intent i = getActivity().getIntent();
         UUID id = (UUID) i.getSerializableExtra(TodoNotificationService.TODOUUID);
         mItem = null;
-        for (ToDoItem toDoItem : mToDoItems) {
-            if (toDoItem.getIdentifier().equals(id)) {
-                mItem = toDoItem;
+        for (TaskItem toDoItem : mToDoItems) {
+            if (toDoItem instanceof ToDoItem && toDoItem.getIdentifier().equals(id)) {
+                mItem = (ToDoItem) toDoItem;
                 break;
             }
         }

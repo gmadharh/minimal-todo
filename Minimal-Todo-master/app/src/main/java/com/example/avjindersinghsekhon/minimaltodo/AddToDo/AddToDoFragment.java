@@ -664,12 +664,12 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
         if (mUserEnteredText.length() > 0) {
 
             String capitalizedString = Character.toUpperCase(mUserEnteredText.charAt(0)) + mUserEnteredText.substring(1);
-            mUserToDoItem.setToDoText(capitalizedString);
+            mUserToDoItem.setTitle(capitalizedString);
             Log.d(TAG, "Description: " + mUserEnteredDescription);
             mUserToDoItem.setmToDoDescription(mUserEnteredDescription);
             mUserToDoItem.setmLink(mUserEnteredLink);
         } else {
-            mUserToDoItem.setToDoText(mUserEnteredText);
+            mUserToDoItem.setTitle(mUserEnteredText);
             Log.d(TAG, "Description: " + mUserEnteredDescription);
             mUserToDoItem.setmToDoDescription(mUserEnteredDescription);
             mUserToDoItem.setmLink(mUserEnteredLink);

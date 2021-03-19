@@ -12,7 +12,7 @@ import java.util.UUID;
 public class DeleteNotificationService extends IntentService {
 
     private StoreRetrieveData storeRetrieveData;
-    private ArrayList<ToDoItem> mToDoItems;
+    private ArrayList<TaskItem> mToDoItems;
     private ToDoItem mItem;
 
     public DeleteNotificationService() {
@@ -26,9 +26,9 @@ public class DeleteNotificationService extends IntentService {
 
         mToDoItems = loadData();
         if (mToDoItems != null) {
-            for (ToDoItem item : mToDoItems) {
-                if (item.getIdentifier().equals(todoID)) {
-                    mItem = item;
+            for (TaskItem item : mToDoItems) {
+                if (item instanceof ToDoItem && item.getIdentifier().equals(todoID)) {
+                    mItem = (ToDoItem) item;
                     break;
                 }
             }
@@ -64,7 +64,7 @@ public class DeleteNotificationService extends IntentService {
         saveData();
     }
 
-    private ArrayList<ToDoItem> loadData() {
+    private ArrayList<TaskItem> loadData() {
         try {
             return storeRetrieveData.loadFromFile();
         } catch (Exception e) {
