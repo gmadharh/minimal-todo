@@ -1,6 +1,7 @@
 package com.example.avjindersinghsekhon.minimaltodo.Main;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -18,8 +19,50 @@ public class MainActivity extends AppDefaultActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         final android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar);
+
+        String theme = getSharedPreferences(MainFragment.THEME_PREFERENCES, MODE_PRIVATE).getString(MainFragment.THEME_SAVED, MainFragment.LIGHTTHEME);
+        if(theme.equals(MainFragment.LIGHTTHEME)) {
+            setTheme(R.style.CustomStyle_LightTheme);
+            toolbar.setBackgroundColor(getResources().getColor(R.color.primaryGrey));
+        } else if (theme.equals(MainFragment.DARKTHEME)) {
+            setTheme(R.style.CustomStyle_DarkTheme);
+            toolbar.setBackgroundColor(getResources().getColor(R.color.primary_darkGrey));
+        } else if (theme.equals(MainFragment.LIGHTREDTHEME)) {
+            setTheme(R.style.CustomStyle_RedLightTheme);
+            toolbar.setBackgroundColor(getResources().getColor(R.color.primaryRed));
+        } else if (theme.equals(MainFragment.DARKREDTHEME)) {
+            setTheme(R.style.CustomStyle_RedDarkTheme);
+            toolbar.setBackgroundColor(getResources().getColor(R.color.primary_darkRed));
+        } else if (theme.equals(MainFragment.LIGHTYELLOWTHEME)) {
+            setTheme(R.style.CustomStyle_YellowLightTheme);
+            toolbar.setBackgroundColor(getResources().getColor(R.color.primaryYellow));
+        } else if (theme.equals(MainFragment.DARKYELLOWTHEME)) {
+            setTheme(R.style.CustomStyle_YellowDarkTheme);
+            toolbar.setBackgroundColor(getResources().getColor(R.color.primary_darkYellow));
+        } else if (theme.equals(MainFragment.LIGHTGREENTHEME)) {
+            setTheme(R.style.CustomStyle_GreenLightTheme);
+            toolbar.setBackgroundColor(getResources().getColor(R.color.primaryGreen));
+        } else if (theme.equals(MainFragment.DARKGREENTHEME)) {
+            setTheme(R.style.CustomStyle_GreenDarkTheme);
+            toolbar.setBackgroundColor(getResources().getColor(R.color.primary_darkGreen));
+        } else if (theme.equals(MainFragment.LIGHTBLUETHEME)) {
+            setTheme(R.style.CustomStyle_BlueLightTheme);
+            toolbar.setBackgroundColor(getResources().getColor(R.color.primaryBlue));
+        } else if (theme.equals(MainFragment.DARKBLUETHEME)) {
+            setTheme(R.style.CustomStyle_BlueDarkTheme);
+            toolbar.setBackgroundColor(getResources().getColor(R.color.primary_darkBlue));
+        } else if (theme.equals(MainFragment.LIGHTPINKTHEME)) {
+            setTheme(R.style.CustomStyle_PinkLightTheme);
+            toolbar.setBackgroundColor(getResources().getColor(R.color.primaryPink));
+        } else if (theme.equals(MainFragment.DARKPINKTHEME)) {
+            setTheme(R.style.CustomStyle_PinkDarkTheme);
+            toolbar.setBackgroundColor(getResources().getColor(R.color.primary_darkPink));
+        }
+
+        toolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
+
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(false);
         }

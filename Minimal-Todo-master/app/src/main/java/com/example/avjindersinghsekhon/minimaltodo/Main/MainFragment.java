@@ -77,8 +77,27 @@ public class MainFragment extends AppDefaultFragment {
     public static final String THEME_PREFERENCES = "com.avjindersekhon.themepref";
     public static final String RECREATE_ACTIVITY = "com.avjindersekhon.recreateactivity";
     public static final String THEME_SAVED = "com.avjindersekhon.savedtheme";
+
     public static final String DARKTHEME = "com.avjindersekon.darktheme";
     public static final String LIGHTTHEME = "com.avjindersekon.lighttheme";
+
+    //New themes:
+    public static final String DARKREDTHEME = "com.avjindersekon.darkredtheme";
+    public static final String LIGHTREDTHEME = "com.avjindersekon.lightredtheme";
+
+    public static final String DARKYELLOWTHEME = "com.avjindersekon.darkyellowtheme";
+    public static final String LIGHTYELLOWTHEME = "com.avjindersekon.lightyellowtheme";
+
+    public static final String DARKGREENTHEME = "com.avjindersekon.darkgreentheme";
+    public static final String LIGHTGREENTHEME = "com.avjindersekon.lightgreentheme";
+
+    public static final String DARKBLUETHEME = "com.avjindersekon.darkbluetheme";
+    public static final String LIGHTBLUETHEME = "com.avjindersekon.lightbluetheme";
+
+    public static final String DARKPINKTHEME = "com.avjindersekon.darkpinktheme";
+    public static final String LIGHTPINKTHEME = "com.avjindersekon.lightpinktheme";
+
+
     private AnalyticsApplication app;
     private String[] testStrings = {"Clean my room",
             "Water the plants",
@@ -97,12 +116,31 @@ public class MainFragment extends AppDefaultFragment {
         //We recover the theme we've set and setTheme accordingly
         theme = getActivity().getSharedPreferences(THEME_PREFERENCES, MODE_PRIVATE).getString(THEME_SAVED, LIGHTTHEME);
 
-        if (theme.equals(LIGHTTHEME)) {
-            mTheme = R.style.CustomStyle_LightTheme;
-        } else {
-            mTheme = R.style.CustomStyle_DarkTheme;
+        if(theme.equals(MainFragment.LIGHTTHEME)) {
+            getActivity().setTheme(R.style.CustomStyle_LightTheme);
+        } else if (theme.equals(MainFragment.DARKTHEME)) {
+            getActivity().setTheme(R.style.CustomStyle_DarkTheme);
+        } else if (theme.equals(MainFragment.LIGHTREDTHEME)) {
+            getActivity().setTheme(R.style.CustomStyle_RedLightTheme);
+        } else if (theme.equals(MainFragment.DARKREDTHEME)) {
+            getActivity().setTheme(R.style.CustomStyle_RedDarkTheme);
+        } else if (theme.equals(MainFragment.LIGHTYELLOWTHEME)) {
+            getActivity().setTheme(R.style.CustomStyle_YellowLightTheme);
+        } else if (theme.equals(MainFragment.DARKYELLOWTHEME)) {
+            getActivity().setTheme(R.style.CustomStyle_YellowDarkTheme);
+        } else if (theme.equals(MainFragment.LIGHTGREENTHEME)) {
+            getActivity().setTheme(R.style.CustomStyle_GreenLightTheme);
+        } else if (theme.equals(MainFragment.DARKGREENTHEME)) {
+            getActivity().setTheme(R.style.CustomStyle_GreenDarkTheme);
+        } else if (theme.equals(MainFragment.LIGHTBLUETHEME)) {
+            getActivity().setTheme(R.style.CustomStyle_BlueLightTheme);
+        } else if (theme.equals(MainFragment.DARKBLUETHEME)) {
+            getActivity().setTheme(R.style.CustomStyle_BlueDarkTheme);
+        } else if (theme.equals(MainFragment.LIGHTPINKTHEME)) {
+            getActivity().setTheme(R.style.CustomStyle_PinkLightTheme);
+        } else if (theme.equals(MainFragment.DARKPINKTHEME)) {
+            getActivity().setTheme(R.style.CustomStyle_PinkDarkTheme);
         }
-        this.getActivity().setTheme(mTheme);
 
         super.onCreate(savedInstanceState);
 
@@ -184,6 +222,16 @@ public class MainFragment extends AppDefaultFragment {
 //        mRecyclerView = (RecyclerView)findViewById(R.id.toDoRecyclerView);
         mRecyclerView = (RecyclerViewEmptySupport) view.findViewById(R.id.toDoRecyclerView);
         if (theme.equals(LIGHTTHEME)) {
+            mRecyclerView.setBackgroundColor(getResources().getColor(R.color.primary_lightest));
+        } else if (theme.equals(LIGHTREDTHEME)) {
+            mRecyclerView.setBackgroundColor(getResources().getColor(R.color.primary_lightest));
+        } else if (theme.equals(LIGHTYELLOWTHEME)) {
+            mRecyclerView.setBackgroundColor(getResources().getColor(R.color.primary_lightest));
+        } else if (theme.equals(LIGHTGREENTHEME)) {
+            mRecyclerView.setBackgroundColor(getResources().getColor(R.color.primary_lightest));
+        } else if (theme.equals(LIGHTBLUETHEME)) {
+            mRecyclerView.setBackgroundColor(getResources().getColor(R.color.primary_lightest));
+        } else if (theme.equals(LIGHTPINKTHEME)) {
             mRecyclerView.setBackgroundColor(getResources().getColor(R.color.primary_lightest));
         }
         mRecyclerView.setEmptyView(view.findViewById(R.id.toDoEmptyView));
@@ -501,8 +549,23 @@ public class MainFragment extends AppDefaultFragment {
             if (sharedPreferences.getString(THEME_SAVED, LIGHTTHEME).equals(LIGHTTHEME)) {
                 bgColor = Color.WHITE;
                 todoTextColor = getResources().getColor(R.color.secondary_text);
+            } else if (sharedPreferences.getString(THEME_SAVED, LIGHTTHEME).equals(LIGHTREDTHEME)) {
+                bgColor = Color.WHITE;
+                todoTextColor = getResources().getColor(R.color.secondary_text);
+            } else if (sharedPreferences.getString(THEME_SAVED, LIGHTTHEME).equals(LIGHTYELLOWTHEME)) {
+                bgColor = Color.WHITE;
+                todoTextColor = getResources().getColor(R.color.secondary_text);
+            } else if (sharedPreferences.getString(THEME_SAVED, LIGHTTHEME).equals(LIGHTGREENTHEME)) {
+                bgColor = Color.WHITE;
+                todoTextColor = getResources().getColor(R.color.secondary_text);
+            } else if (sharedPreferences.getString(THEME_SAVED, LIGHTTHEME).equals(LIGHTBLUETHEME)) {
+                bgColor = Color.WHITE;
+                todoTextColor = getResources().getColor(R.color.secondary_text);
+            } else if (sharedPreferences.getString(THEME_SAVED, LIGHTTHEME).equals(LIGHTPINKTHEME)) {
+                bgColor = Color.WHITE;
+                todoTextColor = getResources().getColor(R.color.secondary_text);
             } else {
-                bgColor = Color.DKGRAY;
+                bgColor = getResources().getColor(R.color.darkModeTasks);
                 todoTextColor = Color.WHITE;
             }
             holder.linearLayout.setBackgroundColor(bgColor);
