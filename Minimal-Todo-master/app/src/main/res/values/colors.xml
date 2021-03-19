@@ -1,35 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-<!--    Changed all the buttons to light pink -->
-    <color name="amber">#F8A1D1</color>
-
     <color name="red_primary">#D32F2F</color>
     <color name="red_secondary">#F44336</color>
     <color name="divider_color">#B6B6B6</color>
     <color name="light_primary_color">#FFCDD2</color>
-
-<!--    Changed the header -->
-    <color name="primary">#B34180</color>
-    <color name="primary_dark">#822659</color>
-
-
-    <color name="primary_light">#C5CAE9</color>
-
-<!--    Changed all the accents to blush pink (Cal and clock) -->
-    <color name="accent">#E36BAE</color>
-
 
     <color name="primary_text">#212121</color>
     <color name="secondary_text">#727272</color>
     <color name="icons">#FFFFFF</color>
     <color name="divider">#B6B6B6</color>
 
-<!--    Changed the color of the title -->
     <color name="grey600">#FFFFFF</color>
 
     <color name="grey300">#E0E0E0</color>
 
     <color name="primary_ligher">#E1E4F4</color>
     <color name="primary_lightest">#F0F1F9</color>
+
+    <color name="backgroundGrey">#606060</color>
+    <color name="darkModeTasks">#3E3E3E</color>
+
+    <color name="primaryGrey">#858585</color>
+    <color name="primary_darkGrey">#4A4A4A</color>
+    <color name="primary_light">#C5CAE9</color>
+    <color name="accentGrey">#0091FF</color>
+
+    <!--    Colour themes -->
+    <color name="primaryRed">#E65959</color>
+    <color name="primary_darkRed">#981919</color>
+    <color name="accentRed">#DE2323</color>
+
+    <color name="primaryYellow">#FFD759</color>
+    <color name="primary_darkYellow">#C2A129</color>
+    <color name="accentYellow">#F5D434</color>
+
+    <color name="primaryGreen">#AFF0AC</color>
+    <color name="primary_darkGreen">#378A32</color>
+    <color name="accentGreen">#56D64F</color>
+
+    <color name="primaryBlue">#ABDDFF</color>
+    <color name="primary_darkBlue">#4182AE</color>
+    <color name="accentBlue">#5FBFFF</color>
+
+    <color name="primaryPink">#FF78C2</color>
+    <color name="primary_darkPink">#9C1A61</color>
+    <color name="accentPink">#FF2BA0</color>
 </resources>

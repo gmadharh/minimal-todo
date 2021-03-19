@@ -5,11 +5,17 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.PreferenceFragment;
+import android.view.View;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import com.example.avjindersinghsekhon.minimaltodo.Analytics.AnalyticsApplication;
 import com.example.avjindersinghsekhon.minimaltodo.Main.MainFragment;
 import com.example.avjindersinghsekhon.minimaltodo.R;
 import com.example.avjindersinghsekhon.minimaltodo.Utility.PreferenceKeys;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
     AnalyticsApplication app;
@@ -28,17 +34,58 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         if (key.equals(preferenceKeys.night_mode_pref_key)) {
             SharedPreferences themePreferences = getActivity().getSharedPreferences(MainFragment.THEME_PREFERENCES, Context.MODE_PRIVATE);
             SharedPreferences.Editor themeEditor = themePreferences.edit();
+
             //We tell our MainLayout to recreate itself because mode has changed
             themeEditor.putBoolean(MainFragment.RECREATE_ACTIVITY, true);
 
             CheckBoxPreference checkBoxPreference = (CheckBoxPreference) findPreference(preferenceKeys.night_mode_pref_key);
-            if (checkBoxPreference.isChecked()) {
-                //Comment out this line if not using Google Analytics
-                app.send(this, "Settings", "Night Mode used");
-                themeEditor.putString(MainFragment.THEME_SAVED, MainFragment.DARKTHEME);
-            } else {
-                themeEditor.putString(MainFragment.THEME_SAVED, MainFragment.LIGHTTHEME);
+
+            int themeID = getActivity().getSharedPreferences("theme", Context.MODE_PRIVATE).getInt("sel_option", 0);
+
+            switch (themeID) {
+                case 0: //set to red
+                    if (checkBoxPreference.isChecked()) {
+                        themeEditor.putString(MainFragment.THEME_SAVED, MainFragment.DARKREDTHEME);
+                    } else {
+                        themeEditor.putString(MainFragment.THEME_SAVED, MainFragment.LIGHTREDTHEME);
+                    }
+                    break;
+                case 1: //set to yellow
+                    if (checkBoxPreference.isChecked()) {
+                        themeEditor.putString(MainFragment.THEME_SAVED, MainFragment.DARKYELLOWTHEME);
+                    } else {
+                        themeEditor.putString(MainFragment.THEME_SAVED, MainFragment.LIGHTYELLOWTHEME);
+                    }
+                    break;
+                case 2: //set to green
+                    if (checkBoxPreference.isChecked()) {
+                        themeEditor.putString(MainFragment.THEME_SAVED, MainFragment.DARKGREENTHEME);
+                    } else {
+                        themeEditor.putString(MainFragment.THEME_SAVED, MainFragment.LIGHTGREENTHEME);
+                    }
+                    break;
+                case 3: //set to blue
+                    if (checkBoxPreference.isChecked()) {
+                        themeEditor.putString(MainFragment.THEME_SAVED, MainFragment.DARKBLUETHEME);
+                    } else {
+                        themeEditor.putString(MainFragment.THEME_SAVED, MainFragment.LIGHTBLUETHEME);
+                    }
+                    break;
+                case 4: //set to pink
+                    if (checkBoxPreference.isChecked()) {
+                        themeEditor.putString(MainFragment.THEME_SAVED, MainFragment.DARKPINKTHEME);
+                    } else {
+                        themeEditor.putString(MainFragment.THEME_SAVED, MainFragment.LIGHTPINKTHEME);
+                    }
+                    break;
+                case 5: //set to grey
+                    if (checkBoxPreference.isChecked()) {
+                        themeEditor.putString(MainFragment.THEME_SAVED, MainFragment.DARKTHEME);
+                    } else {
+                        themeEditor.putString(MainFragment.THEME_SAVED, MainFragment.LIGHTTHEME);
+                    }
             }
+
             themeEditor.apply();
 
             getActivity().recreate();

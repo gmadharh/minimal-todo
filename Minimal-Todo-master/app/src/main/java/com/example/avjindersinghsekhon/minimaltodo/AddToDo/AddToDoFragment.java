@@ -115,15 +115,35 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
         ImageButton reminderIconImageButton;
         TextView reminderRemindMeTextView;
 
-
         theme = getActivity().getSharedPreferences(MainFragment.THEME_PREFERENCES, MODE_PRIVATE).getString(MainFragment.THEME_SAVED, MainFragment.LIGHTTHEME);
-        if (theme.equals(MainFragment.LIGHTTHEME)) {
+
+        if(theme.equals(MainFragment.LIGHTTHEME)) {
             getActivity().setTheme(R.style.CustomStyle_LightTheme);
-            Log.d("OskarSchindler", "Light Theme");
-        } else {
+        } else if (theme.equals(MainFragment.DARKTHEME)) {
             getActivity().setTheme(R.style.CustomStyle_DarkTheme);
+        } else if (theme.equals(MainFragment.LIGHTREDTHEME)) {
+            getActivity().setTheme(R.style.CustomStyle_RedLightTheme);
+        } else if (theme.equals(MainFragment.DARKREDTHEME)) {
+            getActivity().setTheme(R.style.CustomStyle_RedDarkTheme);
+        } else if (theme.equals(MainFragment.LIGHTYELLOWTHEME)) {
+            getActivity().setTheme(R.style.CustomStyle_YellowLightTheme);
+        } else if (theme.equals(MainFragment.DARKYELLOWTHEME)) {
+            getActivity().setTheme(R.style.CustomStyle_YellowDarkTheme);
+        } else if (theme.equals(MainFragment.LIGHTGREENTHEME)) {
+            getActivity().setTheme(R.style.CustomStyle_GreenLightTheme);
+        } else if (theme.equals(MainFragment.DARKGREENTHEME)) {
+            getActivity().setTheme(R.style.CustomStyle_GreenDarkTheme);
+        } else if (theme.equals(MainFragment.LIGHTBLUETHEME)) {
+            getActivity().setTheme(R.style.CustomStyle_BlueLightTheme);
+        } else if (theme.equals(MainFragment.DARKBLUETHEME)) {
+            getActivity().setTheme(R.style.CustomStyle_BlueDarkTheme);
+        } else if (theme.equals(MainFragment.LIGHTPINKTHEME)) {
+            getActivity().setTheme(R.style.CustomStyle_PinkLightTheme);
+        } else if (theme.equals(MainFragment.DARKPINKTHEME)) {
+            getActivity().setTheme(R.style.CustomStyle_PinkDarkTheme);
         }
 
+        super.onCreate(savedInstanceState);
 
         //Show an X in place of <-
         final Drawable cross = getResources().getDrawable(R.drawable.ic_clear_white_24dp);
@@ -650,7 +670,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
                 amPmString = formatDate("a", date);
             }
             String finalString = String.format(getResources().getString(R.string.remind_date_and_time), dateString, timeString, amPmString);
-            mReminderTextView.setTextColor(getResources().getColor(R.color.secondary_text));
+            mReminderTextView.setTextColor(Color.WHITE);
             mReminderTextView.setText(finalString);
         } else {
             mReminderTextView.setVisibility(View.INVISIBLE);
