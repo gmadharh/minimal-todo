@@ -139,7 +139,7 @@
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:scaleType="fitCenter"
-                        android:layout_width="5dp"
+                        android:layout_width="15dp"
                         android:layout_height="wrap_content"
                         android:layout_weight=".4"
                         android:background="@android:color/transparent"
@@ -165,7 +165,7 @@
                     <!-- The actual spinner drop down button and drawer - will be populated with all the categories -->
                     <Spinner
                         android:id="@+id/spinner1"
-                        android:layout_width="500px"
+                        android:layout_width="640px"
                         android:layout_height="wrap_content"
                         android:popupTheme="@color/mdtp_white"
                         />
