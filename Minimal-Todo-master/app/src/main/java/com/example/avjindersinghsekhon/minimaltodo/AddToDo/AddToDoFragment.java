@@ -45,12 +45,16 @@ import com.example.avjindersinghsekhon.minimaltodo.Main.MainActivity;
 import com.example.avjindersinghsekhon.minimaltodo.Main.MainFragment;
 import com.example.avjindersinghsekhon.minimaltodo.R;
 import com.example.avjindersinghsekhon.minimaltodo.Utility.CategoryItem;
+import com.example.avjindersinghsekhon.minimaltodo.Utility.StoreRetrieveData;
 import com.example.avjindersinghsekhon.minimaltodo.Utility.TaskItem;
 import com.example.avjindersinghsekhon.minimaltodo.Utility.ToDoItem;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
+import org.json.JSONException;
+
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -167,17 +171,28 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
         //Drop down of all the categories including the none category
         List<String> categories = new ArrayList<String>();
         categories.add("None");
-        categories.add("School");
-        categories.add("Work");
-        categories.add("Home");
 
 
+        //this creates a list of task items (Both ToDoItems and CategoryItems)
+        ArrayList<TaskItem> items = new ArrayList<TaskItem>();
 
-        List<CategoryItem> allCat = new ArrayList<CategoryItem>();
+        // Create a store variable that is of class StoreRetrieveData
+        StoreRetrieveData store = new StoreRetrieveData(getContext(),"todoitems.json");
 
 
+        // set the items list to what is returned from the getLocallyStoredData method (all the locally stored taskItems)
+        items = getLocallyStoredData(store);
 
+        // Iterate through each of the task items
+        for (TaskItem newItem : items) {
 
+            // If the task item is also a category item
+            if (newItem instanceof CategoryItem) {
+
+                //Add the category to the spinner drop down
+                categories.add(((CategoryItem) newItem).getTitle());
+            }
+        }
 
 
         //String Array Adapter
@@ -875,4 +890,23 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
     public static AddToDoFragment newInstance() {
         return new AddToDoFragment();
     }
+
+    //REMOVE THIS AFTER
+    public static ArrayList<TaskItem> getLocallyStoredData(StoreRetrieveData storeRetrieveData) {
+        ArrayList<TaskItem> items = null;
+
+        try {
+            items = storeRetrieveData.loadFromFile();
+
+        } catch (IOException | JSONException e) {
+            e.printStackTrace();
+        }
+
+        if (items == null) {
+            items = new ArrayList<>();
+        }
+        return items;
+
+    }
+
 }
