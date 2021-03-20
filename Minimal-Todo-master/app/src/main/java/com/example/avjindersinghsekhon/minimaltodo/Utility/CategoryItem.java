@@ -1,5 +1,6 @@
 package com.example.avjindersinghsekhon.minimaltodo.Utility;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -11,7 +12,6 @@ public class CategoryItem extends TaskItem {
     // declare variables
     private String title;
     private UUID categoryIdentifier;
-    private ArrayList<ToDoItem> tasks;
 
     // final strings used for writing to the JSON
     private static final String CATTITLE = "cattitle";
@@ -26,7 +26,6 @@ public class CategoryItem extends TaskItem {
      */
     public CategoryItem(){
         title = "";
-        tasks = new ArrayList<>();
         categoryIdentifier = UUID.randomUUID();
     }
 
@@ -36,7 +35,6 @@ public class CategoryItem extends TaskItem {
      */
     public CategoryItem(String title){
         this.title = title;
-        tasks = new ArrayList<>();
         categoryIdentifier = UUID.randomUUID();
     }
 
@@ -52,27 +50,6 @@ public class CategoryItem extends TaskItem {
      */
     public String getTitle(){
         return this.title;
-    }
-
-    /**
-     * Returns the tasks in the category
-     * @return - ArrayList of ToDoItem's
-     */
-    public ArrayList<ToDoItem> getTasks(){
-        return this.tasks;
-    }
-
-    public void addTask(ToDoItem item){
-        tasks.add(item);
-    }
-
-    /**
-     * Removes the specified task from the Category
-     * @param item - The ToDoItem to remove
-     * @return - boolean if the item was removed, if it is present
-     */
-    public boolean removeTask(ToDoItem item){
-        return tasks.remove(item);
     }
 
     /**

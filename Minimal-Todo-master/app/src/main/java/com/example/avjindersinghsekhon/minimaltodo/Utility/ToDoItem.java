@@ -11,6 +11,8 @@ public class ToDoItem extends TaskItem {
     private boolean mHasReminder;
     //add description
     private String mToDoDescription;
+
+    private String catIdent;
     // add a link
     private String mLink;
     // boolean for priority
@@ -44,6 +46,7 @@ public class ToDoItem extends TaskItem {
         mToDoDate = toDoDate;
         mLink = todoLink;
         categoryBelongs = new CategoryItem();
+        catIdent = "None";
         mPriority = hasPriority;
         mToDoDescription = tododescription;
         mTodoColor = 1677725;
@@ -64,7 +67,7 @@ public class ToDoItem extends TaskItem {
         jsonObject.put(TODODESCRIPTION, mToDoDescription);
         jsonObject.put(TODOLINK,mLink);
         jsonObject.put(TODOPRIORITY,mPriority);
-        jsonObject.put(TODOCATEGORY,getCategoryBelongs().getTitle());
+        jsonObject.put(TODOCATEGORY,catIdent);
 //        jsonObject.put(TODOLASTEDITED, mLastEdited.getTime());
         if (mToDoDate != null) {
             jsonObject.put(TODODATE, mToDoDate.getTime());
@@ -85,6 +88,8 @@ public class ToDoItem extends TaskItem {
         mTodoColor = jsonObject.getInt(TODOCOLOR);
         mLink = jsonObject.getString(TODOLINK);
         mPriority = jsonObject.getBoolean(TODOPRIORITY);
+        catIdent = jsonObject.getString(TODOCATEGORY);
+
 
         mTodoIdentifier = UUID.fromString(jsonObject.getString(TODOIDENTIFIER));
 
@@ -104,19 +109,19 @@ public class ToDoItem extends TaskItem {
     }
 
     /**
-     * Gets the Category object for which this task belongs to
-     * @return Category object that the task is in, null if it doesn't belong to one
+     * Gets the Category string for which this task belongs to
+     * @return Category string that the task is in, none or empty if none
      */
-    public CategoryItem getCategoryBelongs(){
-       return this.categoryBelongs;
+    public String getCategoryBelongs(){
+       return this.catIdent;
     }
 
     /**
-     * Sets the Category object for which this task belongs to
-     * @param categoryItem Category to set this task to belong to
+     * Sets the Category string for which this task belongs to
+     * @param category Category to set this task to belong to
      */
-    public void setCategoryBelongs(CategoryItem categoryItem){
-        this.categoryBelongs = categoryItem;
+    public void setCategoryBelongs(String category){
+        this.catIdent = category;
     }
 
     // getter for the description

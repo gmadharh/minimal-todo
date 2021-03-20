@@ -480,6 +480,7 @@ private FloatingActionButton mCategoryFAB;
                 if (((ToDoItem) item).getToDoText().length() <= 0) {
                     return;
                 }
+
                 boolean existed = false;
 
                 if (((ToDoItem) item).hasReminder() && ((ToDoItem) item).getToDoDate() != null) {

@@ -125,7 +125,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(View view, @Nullable final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         app = (AnalyticsApplication) getActivity().getApplication();
 //        setContentView(R.layout.new_to_do_layout);
@@ -211,7 +211,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
                 // Gets the name of the currently selected category
                 CategoryItem cItem = (CategoryItem) parent.getItemAtPosition(position);
 
-                mUserToDoItem.setCategoryBelongs(cItem);
+                mUserToDoItem.setCategoryBelongs(cItem.getTitle());
             }
 
             @Override
@@ -219,6 +219,8 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 
             }
         };
+
+
 
         categorySpinner.setOnItemSelectedListener(listener);
 

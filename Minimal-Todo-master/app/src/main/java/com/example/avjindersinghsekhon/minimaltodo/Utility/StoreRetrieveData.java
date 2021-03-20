@@ -25,12 +25,13 @@ public class StoreRetrieveData {
         mFileName = filename;
     }
 
-    public static JSONArray toJSONArray(ArrayList<TaskItem> items) throws JSONException {
+    protected static JSONArray toJSONArray(ArrayList<TaskItem> items) throws JSONException {
         JSONArray jsonArray = new JSONArray();
         for (TaskItem item : items) {
             JSONObject jsonObject = item.toJSON();
             jsonArray.put(jsonObject);
         }
+
         return jsonArray;
     }
 
@@ -40,6 +41,7 @@ public class StoreRetrieveData {
         OutputStreamWriter outputStreamWriter;
         fileOutputStream = mContext.openFileOutput(mFileName, Context.MODE_PRIVATE);
         outputStreamWriter = new OutputStreamWriter(fileOutputStream);
+        System.out.println(toJSONArray(items).toString());
         outputStreamWriter.write(toJSONArray(items).toString());
         outputStreamWriter.close();
         fileOutputStream.close();
@@ -65,14 +67,12 @@ public class StoreRetrieveData {
 
                 if (jsonArray.getJSONObject(i).getString("itemtype").equals("category"))
                 {
-                    System.out.println("LOADED CATEGORY ITEM FROM FILE");
                     item = new CategoryItem();
                     item.jsonToItem(jsonArray.getJSONObject(i));
 
                 }
                 else if(jsonArray.getJSONObject(i).getString("itemtype").equals("task"))
                 {
-                    System.out.println("LOADED TASK ITEM FROM FILE");
                     item = new ToDoItem();
                     item.jsonToItem(jsonArray.getJSONObject(i));
                 }
