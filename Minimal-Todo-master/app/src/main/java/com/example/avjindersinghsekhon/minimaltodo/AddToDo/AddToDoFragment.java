@@ -27,11 +27,14 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.content.ClipboardManager;
 import android.widget.Toast;
@@ -41,14 +44,18 @@ import com.example.avjindersinghsekhon.minimaltodo.AppDefault.AppDefaultFragment
 import com.example.avjindersinghsekhon.minimaltodo.Main.MainActivity;
 import com.example.avjindersinghsekhon.minimaltodo.Main.MainFragment;
 import com.example.avjindersinghsekhon.minimaltodo.R;
+import com.example.avjindersinghsekhon.minimaltodo.Utility.CategoryItem;
+import com.example.avjindersinghsekhon.minimaltodo.Utility.TaskItem;
 import com.example.avjindersinghsekhon.minimaltodo.Utility.ToDoItem;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
@@ -106,6 +113,13 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 
     private ImageButton deleteLink; //delete link button
 
+    // New Variable for category spinner (drop down button and drawer)
+    private Spinner categorySpinner;
+
+
+
+
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -144,6 +158,56 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
         }
 
         super.onCreate(savedInstanceState);
+
+        //Category Drop Down Starts Here
+
+        // Sets the category spinner to the xml view
+        categorySpinner = (Spinner) view.findViewById(R.id.spinner1);
+
+        //Drop down of all the categories including the none category
+        List<String> categories = new ArrayList<String>();
+        categories.add("None");
+        categories.add("School");
+        categories.add("Work");
+        categories.add("Home");
+
+
+
+        List<CategoryItem> allCat = new ArrayList<CategoryItem>();
+
+
+
+
+
+
+        //String Array Adapter
+        ArrayAdapter<String> categoryAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, categories);
+
+        //Set Adapter
+        categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        categorySpinner.setAdapter(categoryAdapter);
+
+        //Set the text color of the item selected to white so that it shows up better
+        AdapterView.OnItemSelectedListener listener = new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                ((TextView) parent.getChildAt(0)).setTextColor(0xFFFFFFFF);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        };
+
+        categorySpinner.setOnItemSelectedListener(listener);
+
+
+        //Category Drop Down ends Here
+
+
+
+
 
         //Show an X in place of <-
         final Drawable cross = getResources().getDrawable(R.drawable.ic_clear_white_24dp);
