@@ -235,6 +235,9 @@ private FloatingActionButton mCategoryFAB;
 
         mCategoryFAB = (FloatingActionButton) view.findViewById(R.id.addCategoryFAB);
 
+        /*
+            Listener for the Floating Button to create a Category
+         */
         mCategoryFAB.setOnClickListener(new View.OnClickListener() {
 
 //            @SuppressWarnings("deprecation")
@@ -242,10 +245,20 @@ private FloatingActionButton mCategoryFAB;
             public void onClick(View v) {
                 //app.send(this, "Action", "FAB pressed");
 
+                // create new Intent
+                // Used for calling the CustomDialogActivity class
+                // Also sends in the Category object to the activity
                 Intent i = new Intent(getContext(),CustomDialogActivity.class);
+
+                // Create new Category Object
                 CategoryItem cItem = new CategoryItem();
+
+                // Puts the Category object with the intent
+                // This is by a key-value pair
+                // The String "category" holds the object 'cItem'
                 i.putExtra("category",cItem);
 
+                // Start the activity
                 startActivityForResult(i,REQUEST_ID_CAT_ITEM);
 
             }
@@ -450,12 +463,18 @@ private FloatingActionButton mCategoryFAB;
         }
     }
 
+    /*
+        This method is called after the Activity for creating a ToDoItem and Category is finished
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
         if (resultCode != RESULT_CANCELED && requestCode == REQUEST_ID_TODO_ITEM) {
 
+            // Retrieve new TaskItem from the Intent
             TaskItem item = (TaskItem) data.getSerializableExtra(TODOITEM);
 
+            // If the TaskItem is a ToDoItem
             if (item instanceof ToDoItem)
             {
                 if (((ToDoItem) item).getToDoText().length() <= 0) {
@@ -486,6 +505,8 @@ private FloatingActionButton mCategoryFAB;
             }
 
         }
+
+        // else it's a category
         else if (requestCode == REQUEST_ID_CAT_ITEM){
 
             TaskItem item = (TaskItem) data.getSerializableExtra("category");
