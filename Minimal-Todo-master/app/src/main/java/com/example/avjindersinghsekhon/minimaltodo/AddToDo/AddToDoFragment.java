@@ -169,12 +169,12 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
         categorySpinner = (Spinner) view.findViewById(R.id.spinner1);
 
         //Drop down of all the categories including the none category
-        List<String> categories = new ArrayList<String>();
-        categories.add("None");
+        List<CategoryItem> categories = new ArrayList<>();
+        categories.add(new CategoryItem("None"));
 
 
         //this creates a list of task items (Both ToDoItems and CategoryItems)
-        ArrayList<TaskItem> items = new ArrayList<TaskItem>();
+        ArrayList<TaskItem> items = new ArrayList<>();
 
         // Create a store variable that is of class StoreRetrieveData
         StoreRetrieveData store = new StoreRetrieveData(getContext(),"todoitems.json");
@@ -190,13 +190,13 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
             if (newItem instanceof CategoryItem) {
 
                 //Add the category to the spinner drop down
-                categories.add(((CategoryItem) newItem).getTitle());
+                categories.add(((CategoryItem) newItem));
             }
         }
 
 
         //String Array Adapter
-        ArrayAdapter<String> categoryAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, categories);
+        ArrayAdapter<CategoryItem> categoryAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, categories);
 
         //Set Adapter
         categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -207,6 +207,11 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 ((TextView) parent.getChildAt(0)).setTextColor(0xFFFFFFFF);
+
+                // Gets the name of the currently selected category
+                CategoryItem cItem = (CategoryItem) parent.getItemAtPosition(position);
+
+                mUserToDoItem.setCategoryBelongs(cItem);
             }
 
             @Override

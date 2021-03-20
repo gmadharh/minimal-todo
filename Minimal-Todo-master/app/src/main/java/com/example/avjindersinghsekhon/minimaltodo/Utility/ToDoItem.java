@@ -21,6 +21,7 @@ public class ToDoItem extends TaskItem {
     private int mTodoColor;
     private Date mToDoDate;
     private UUID mTodoIdentifier;
+    private CategoryItem categoryBelongs;
     //add description
     private static final String TODODESCRIPTION = "tododescription";
     private static final String TODOLINK = "todolink";
@@ -31,6 +32,7 @@ public class ToDoItem extends TaskItem {
     private static final String TODODATE = "tododate";
     private static final String TODOIDENTIFIER = "todoidentifier";
     private static final String TODOPRIORITY = "todopriority";
+    private static final String TODOCATEGORY = "todocategory";
 
     private static final String ITEMTYPE = "itemtype";
     private final String TASKTYPE = "task";
@@ -41,31 +43,12 @@ public class ToDoItem extends TaskItem {
         mHasReminder = hasReminder;
         mToDoDate = toDoDate;
         mLink = todoLink;
+        categoryBelongs = new CategoryItem();
         mPriority = hasPriority;
         mToDoDescription = tododescription;
         mTodoColor = 1677725;
         mTodoIdentifier = UUID.randomUUID();
     }
-
-/*    // constructor which takes in a jsonObject
-    // used for writing to file?
-    public ToDoItem(JSONObject jsonObject) throws JSONException {
-        mToDoText = jsonObject.getString(TODOTEXT);
-        mToDoDescription = jsonObject.getString(TODODESCRIPTION);
-        mHasReminder = jsonObject.getBoolean(TODOREMINDER);
-        mTodoColor = jsonObject.getInt(TODOCOLOR);
-        mLink = jsonObject.getString(TODOLINK);
-        mPriority = jsonObject.getBoolean(TODOPRIORITY);
-
-        mTodoIdentifier = UUID.fromString(jsonObject.getString(TODOIDENTIFIER));
-
-//        if(jsonObject.has(TODOLASTEDITED)){
-//            mLastEdited = new Date(jsonObject.getLong(TODOLASTEDITED));
-//        }
-        if (jsonObject.has(TODODATE)) {
-            mToDoDate = new Date(jsonObject.getLong(TODODATE));
-        }
-    }*/
 
     // setter for title
     @Override
@@ -81,6 +64,7 @@ public class ToDoItem extends TaskItem {
         jsonObject.put(TODODESCRIPTION, mToDoDescription);
         jsonObject.put(TODOLINK,mLink);
         jsonObject.put(TODOPRIORITY,mPriority);
+        jsonObject.put(TODOCATEGORY,getCategoryBelongs().getTitle());
 //        jsonObject.put(TODOLASTEDITED, mLastEdited.getTime());
         if (mToDoDate != null) {
             jsonObject.put(TODODATE, mToDoDate.getTime());
@@ -117,6 +101,22 @@ public class ToDoItem extends TaskItem {
     // empty constructor which makes a default note with placeholder info
     public ToDoItem() {
         this("Clean my room","Sweep and Mop my Room","www.google.com", true, new Date(),false);
+    }
+
+    /**
+     * Gets the Category object for which this task belongs to
+     * @return Category object that the task is in, null if it doesn't belong to one
+     */
+    public CategoryItem getCategoryBelongs(){
+       return this.categoryBelongs;
+    }
+
+    /**
+     * Sets the Category object for which this task belongs to
+     * @param categoryItem Category to set this task to belong to
+     */
+    public void setCategoryBelongs(CategoryItem categoryItem){
+        this.categoryBelongs = categoryItem;
     }
 
     // getter for the description

@@ -40,6 +40,12 @@ public class CategoryItem extends TaskItem {
         categoryIdentifier = UUID.randomUUID();
     }
 
+    @Override
+    public String toString() {
+        return this.title;
+    }
+
+
     /**
      * Returns the title of the Category
      * @return - title
