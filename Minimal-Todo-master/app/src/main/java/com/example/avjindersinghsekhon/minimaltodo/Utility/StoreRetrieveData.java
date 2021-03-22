@@ -25,7 +25,7 @@ public class StoreRetrieveData {
         mFileName = filename;
     }
 
-    protected static JSONArray toJSONArray(ArrayList<TaskItem> items) throws JSONException {
+    public static JSONArray toJSONArray(ArrayList<TaskItem> items) throws JSONException {
         JSONArray jsonArray = new JSONArray();
         for (TaskItem item : items) {
             JSONObject jsonObject = item.toJSON();
@@ -41,7 +41,6 @@ public class StoreRetrieveData {
         OutputStreamWriter outputStreamWriter;
         fileOutputStream = mContext.openFileOutput(mFileName, Context.MODE_PRIVATE);
         outputStreamWriter = new OutputStreamWriter(fileOutputStream);
-        System.out.println(toJSONArray(items).toString());
         outputStreamWriter.write(toJSONArray(items).toString());
         outputStreamWriter.close();
         fileOutputStream.close();

@@ -87,7 +87,8 @@ public class TestTodoItem extends TestCase {
         try {
 
             JSONObject json = originalItem.toJSON();
-            ToDoItem itemFromJson = new ToDoItem(json);
+            ToDoItem itemFromJson = new ToDoItem();
+            itemFromJson.jsonToItem(json);
 
             assertEquals(originalItem.getToDoText(), itemFromJson.getToDoText());
             // testing if the link retrieved matches the one in the object
