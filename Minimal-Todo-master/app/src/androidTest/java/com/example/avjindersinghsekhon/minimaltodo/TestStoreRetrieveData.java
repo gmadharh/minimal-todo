@@ -27,6 +27,7 @@ import android.content.Context;
 import android.test.ActivityUnitTestCase;
 
 import com.example.avjindersinghsekhon.minimaltodo.Main.MainActivity;
+import com.example.avjindersinghsekhon.minimaltodo.Main.MainFragment;
 import com.example.avjindersinghsekhon.minimaltodo.Utility.StoreRetrieveData;
 import com.example.avjindersinghsekhon.minimaltodo.Utility.ToDoItem;
 
@@ -34,6 +35,8 @@ import org.json.JSONArray;
 
 import java.util.ArrayList;
 import java.util.Date;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * Test cases for StoreRetrieveData class
@@ -172,5 +175,38 @@ public class TestStoreRetrieveData extends ActivityUnitTestCase<MainActivity> {
     private StoreRetrieveData getDataStorage() {
         Context context = getInstrumentation().getTargetContext();
         return new StoreRetrieveData(context, FILENAME);
+    }
+
+    /*Ensure theme is changed accordingly*/
+    public void testThemeChange() {
+        //get the theme
+        String  theme = getActivity().getSharedPreferences(MainFragment.THEME_PREFERENCES, MODE_PRIVATE).getString(MainFragment.THEME_SAVED, MainFragment.LIGHTTHEME);
+
+        //make sure the saved theme matches the set theme
+        if(theme.equals(MainFragment.LIGHTTHEME)) {
+            assertEquals(MainFragment.THEME_SAVED,MainFragment.LIGHTTHEME);
+        } else if (theme.equals(MainFragment.DARKTHEME)) {
+            assertEquals(MainFragment.THEME_SAVED,MainFragment.DARKTHEME);
+        } else if (theme.equals(MainFragment.LIGHTREDTHEME)) {
+            assertEquals(MainFragment.THEME_SAVED,MainFragment.LIGHTREDTHEME);
+        } else if (theme.equals(MainFragment.DARKREDTHEME)) {
+            assertEquals(MainFragment.THEME_SAVED,MainFragment.DARKREDTHEME);
+        } else if (theme.equals(MainFragment.LIGHTYELLOWTHEME)) {
+            assertEquals(MainFragment.THEME_SAVED,MainFragment.LIGHTYELLOWTHEME);
+        } else if (theme.equals(MainFragment.DARKYELLOWTHEME)) {
+            assertEquals(MainFragment.THEME_SAVED,MainFragment.DARKYELLOWTHEME);
+        } else if (theme.equals(MainFragment.LIGHTGREENTHEME)) {
+            assertEquals(MainFragment.THEME_SAVED,MainFragment.LIGHTGREENTHEME);
+        } else if (theme.equals(MainFragment.DARKGREENTHEME)) {
+            assertEquals(MainFragment.THEME_SAVED,MainFragment.DARKGREENTHEME);
+        } else if (theme.equals(MainFragment.LIGHTBLUETHEME)) {
+            assertEquals(MainFragment.THEME_SAVED,MainFragment.LIGHTBLUETHEME);
+        } else if (theme.equals(MainFragment.DARKBLUETHEME)) {
+            assertEquals(MainFragment.THEME_SAVED,MainFragment.DARKBLUETHEME);
+        } else if (theme.equals(MainFragment.LIGHTPINKTHEME)) {
+            assertEquals(MainFragment.THEME_SAVED,MainFragment.LIGHTPINKTHEME);
+        } else if (theme.equals(MainFragment.DARKPINKTHEME)) {
+            assertEquals(MainFragment.THEME_SAVED,MainFragment.DARKPINKTHEME);
+        }
     }
 }
