@@ -8,20 +8,17 @@ import android.support.v4.app.Fragment;
 import com.example.avjindersinghsekhon.minimaltodo.AppDefault.AppDefaultActivity;
 import com.example.avjindersinghsekhon.minimaltodo.R;
 
-/**
- * Activity class for CustomDialogFragment
- * Acts as a wrapper for the fragment
- * This is used to open the form for collecting and creating a Category object
- */
-public class CustomDialogActivity extends AppDefaultActivity {
+public class CategoryView extends AppDefaultActivity {
 
     /**
      * onCreate method
      * @param savedInstanceState
      */
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_category);
     }
 
     /**
@@ -30,16 +27,16 @@ public class CustomDialogActivity extends AppDefaultActivity {
      */
     @Override
     protected int contentViewLayoutRes() {
-        return R.layout.activity_dialog;
+        return R.layout.activity_category;
     }
 
     /**
-   * @return Fragment
+     * @return Fragment
      */
     @NonNull
     @Override
     protected Fragment createInitialFragment() {
-        return CustomDialogFragment.newInstance();
+        return CategoryViewFragment.newInstance();
     }
 
     /**
@@ -49,4 +46,5 @@ public class CustomDialogActivity extends AppDefaultActivity {
     protected void onResume() {
         super.onResume();
     }
+
 }

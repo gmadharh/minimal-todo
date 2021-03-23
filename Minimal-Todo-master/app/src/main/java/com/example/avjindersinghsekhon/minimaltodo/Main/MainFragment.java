@@ -29,6 +29,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
@@ -634,6 +635,7 @@ private FloatingActionButton mCategoryFAB;
         @Override
         public void onBindViewHolder(final BasicListAdapter.ViewHolder holder, final int position) {
             TaskItem item = items.get(position);
+
 //            if(item.getToDoDate()!=null && item.getToDoDate().before(new Date())){
 //                item.setToDoDate(null);
 //            }
@@ -668,6 +670,9 @@ private FloatingActionButton mCategoryFAB;
 
             if(item instanceof ToDoItem)
             {
+
+
+
                 if (((ToDoItem) item).hasReminder() && ((ToDoItem) item).getToDoDate() != null) {
                     holder.mToDoTextview.setMaxLines(1);
                     holder.mTimeTextView.setVisibility(View.VISIBLE);
@@ -721,14 +726,31 @@ private FloatingActionButton mCategoryFAB;
                 //set category title once CategoryItem is created
                 CategoryItem categoryItem;
                 holder.mToDoTextview.setText(((CategoryItem) item).getTitle());
+                holder.mView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    //When category is click show test
+                    public void onClick(View view) {
+                        //Toast.makeText(getContext(),"test",Toast.LENGTH_LONG).show();
+                        Intent i = new Intent(getContext(),CategoryView.class);
+                        i.putExtra("tasks",mToDoItemsArrayList);
 
 
+
+
+                        startActivity(i);
+
+
+                    }
+                });
+                
             }
 
 
 
 
         }
+
+
 
         @Override
         public int getItemCount() {
