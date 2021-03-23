@@ -1,6 +1,8 @@
 package com.example.avjindersinghsekhon.minimaltodo;
 
 import com.example.avjindersinghsekhon.minimaltodo.Utility.CategoryItem;
+import com.example.avjindersinghsekhon.minimaltodo.Utility.ToDoItem;
+import com.example.avjindersinghsekhon.minimaltodo.Utility.TodoNotificationService;
 
 import junit.framework.TestCase;
 
@@ -60,4 +62,61 @@ public class TestCategoryItem extends TestCase {
         }
 
     }
+
+    /**
+     * Check if setting the category to which a task belongs works
+     */
+    public void testAddingTasktoCategory(){
+
+        ToDoItem item = new ToDoItem();
+        CategoryItem categoryItem = new CategoryItem(CAT_TITLE);
+
+        item.setCategoryBelongs(CAT_TITLE);
+
+        assertEquals(item.getCategoryBelongs(),categoryItem.getTitle());
+
+    }
+
+    /**
+     * Ensure that when converting a ToDoItem, that belongs to a category, to a JSON and then BACK to a ToDoItem, that it retains the category it's associated with
+     */
+    public void testAddingTasktoCategoryJSON(){
+
+        ToDoItem item = new ToDoItem();
+        CategoryItem categoryItem = new CategoryItem(CAT_TITLE);
+
+        item.setCategoryBelongs(CAT_TITLE);
+
+        try {
+
+            JSONObject json = item.toJSON();
+            ToDoItem itemFromJson = new ToDoItem();
+            itemFromJson.jsonToItem(json);
+
+            assertEquals(categoryItem.getTitle(), itemFromJson.getCategoryBelongs());
+
+        } catch (JSONException e) {
+            fail("Exception thrown during test execution: " + e.getMessage());
+        }
+
+    }
+
+    /**
+     * Ensure that when converting a ToDoItem to a JSON that it holds the Category with which it's associated with
+     */
+    public void testAddingTasktoCategoryFromJSON() {
+
+        ToDoItem item = new ToDoItem();
+        CategoryItem categoryItem = new CategoryItem(CAT_TITLE);
+
+        item.setCategoryBelongs(CAT_TITLE);
+
+        try {
+            JSONObject json = item.toJSON();
+            assertEquals(categoryItem.getTitle(), json.getString("todocategory"));
+        } catch (JSONException e) {
+            fail("Exception thrown during test execution: " + e.getMessage());
+        }
+    }
+
 }
