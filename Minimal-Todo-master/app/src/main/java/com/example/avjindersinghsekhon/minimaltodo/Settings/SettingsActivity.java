@@ -37,8 +37,11 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         app = (AnalyticsApplication) getApplication();
+
+        //get the theme
         String theme = getSharedPreferences(MainFragment.THEME_PREFERENCES, MODE_PRIVATE).getString(MainFragment.THEME_SAVED, MainFragment.LIGHTTHEME);
 
+        //set the theme
         if(theme.equals(MainFragment.LIGHTTHEME)) {
             setTheme(R.style.CustomStyle_LightTheme);
         } else if (theme.equals(MainFragment.DARKTHEME)) {
@@ -122,20 +125,26 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     public void onThemeButtonClicked(View view) {
-        // Check if the button has been checked
+        // Check if the radio button has been checked
         boolean checked = ((RadioButton) view).isChecked();
-        SharedPreferences themePreferences = getSharedPreferences(MainFragment.THEME_PREFERENCES, Context.MODE_PRIVATE);
-        SharedPreferences.Editor themeEditor = themePreferences.edit();
-        String currentTheme = getSharedPreferences(MainFragment.THEME_PREFERENCES, MODE_PRIVATE).getString(MainFragment.THEME_SAVED, MainFragment.LIGHTTHEME);
         boolean lightMode = false;
         String theme = "";
 
+        //get the theme preferences so we can change the theme
+        SharedPreferences themePreferences = getSharedPreferences(MainFragment.THEME_PREFERENCES, Context.MODE_PRIVATE);
+        SharedPreferences.Editor themeEditor = themePreferences.edit();
+
+        //find the current theme so we can figure out if dark mode is selected or not
+        String currentTheme = getSharedPreferences(MainFragment.THEME_PREFERENCES, MODE_PRIVATE).getString(MainFragment.THEME_SAVED, MainFragment.LIGHTTHEME);
+
+        //if the current theme is light, we set light mode to true
         if(currentTheme.equals(MainFragment.LIGHTTHEME) || currentTheme.equals(MainFragment.LIGHTREDTHEME) || currentTheme.equals(MainFragment.LIGHTYELLOWTHEME) || currentTheme.equals(MainFragment.LIGHTGREENTHEME) || currentTheme.equals(MainFragment.LIGHTBLUETHEME) || currentTheme.equals(MainFragment.LIGHTPINKTHEME)) {
             lightMode = true;
-        }  else {
+        }  else { //else, we set light mode to false
             lightMode = false;
         }
 
+        //if the radio button is clicked, we now change the theme
         if(checked) {
             switch(view.getId()) {
                 case R.id.themeRed:
@@ -187,10 +196,13 @@ public class SettingsActivity extends AppCompatActivity {
                     }
                     break;
             }
+
+            //apply changes to theme editor
             themeEditor.putBoolean(MainFragment.RECREATE_ACTIVITY, true);
             themeEditor.putString(MainFragment.THEME_SAVED, theme);
             themeEditor.apply();
-            //We tell our MainLayout to recreate itself because mode has changed
+
+            // tell our MainLayout to recreate itself because mode has changed
             recreate();
         }
     }
