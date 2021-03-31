@@ -102,6 +102,11 @@ public class ToDoItem extends TaskItem {
 
     }
 
+    @Override
+    public String toString() {
+        return this.mToDoText;
+    }
+
 
     // empty constructor which makes a default note with placeholder info
     public ToDoItem() {

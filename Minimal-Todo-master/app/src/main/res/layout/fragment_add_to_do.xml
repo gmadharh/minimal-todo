@@ -165,7 +165,7 @@
                     <!-- The actual spinner drop down button and drawer - will be populated with all the categories -->
                     <Spinner
                         android:id="@+id/spinner1"
-                        android:layout_width="640px"
+                        android:layout_width="200dp"
                         android:layout_height="wrap_content"
                         android:popupTheme="@color/mdtp_white"
                         />

@@ -634,7 +634,7 @@ private FloatingActionButton mCategoryFAB;
 
         @Override
         public void onBindViewHolder(final BasicListAdapter.ViewHolder holder, final int position) {
-            TaskItem item = items.get(position);
+            final TaskItem item = items.get(position);
 
 //            if(item.getToDoDate()!=null && item.getToDoDate().before(new Date())){
 //                item.setToDoDate(null);
@@ -668,10 +668,10 @@ private FloatingActionButton mCategoryFAB;
             }
             holder.linearLayout.setBackgroundColor(bgColor);
 
-            if(item instanceof ToDoItem)
+            if(item instanceof ToDoItem && ((ToDoItem) item).getCategoryBelongs().equalsIgnoreCase("None"))
             {
 
-
+                holder.linearLayout.setVisibility(View.VISIBLE);
 
                 if (((ToDoItem) item).hasReminder() && ((ToDoItem) item).getToDoDate() != null) {
                     holder.mToDoTextview.setMaxLines(1);
@@ -724,7 +724,6 @@ private FloatingActionButton mCategoryFAB;
             }
             else if (item instanceof CategoryItem){
                 //set category title once CategoryItem is created
-                CategoryItem categoryItem;
                 holder.mToDoTextview.setText(((CategoryItem) item).getTitle());
                 holder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -733,21 +732,17 @@ private FloatingActionButton mCategoryFAB;
                         //Toast.makeText(getContext(),"test",Toast.LENGTH_LONG).show();
                         Intent i = new Intent(getContext(),CategoryView.class);
                         i.putExtra("tasks",mToDoItemsArrayList);
-
-
-
+                        i.putExtra("categoryClicked",((CategoryItem) item));
 
                         startActivity(i);
-
-
                     }
                 });
                 
             }
-
-
-
-
+            else{
+                holder.linearLayout.setVisibility(View.GONE);
+                holder.itemView.setLayoutParams(new LinearLayout.LayoutParams(0,0));
+            }
         }
 
 
