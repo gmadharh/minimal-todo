@@ -624,6 +624,27 @@ private FloatingActionButton mCategoryFAB;
                             notifyItemInserted(mIndexOfDeletedToDoItem);
                         }
                     }).show();
+
+            //User Story #20, Task #75 - Ask user for confirmation to delete the whole category and its tasks
+            //Check if its a category
+            if (mJustDeletedToDoItem instanceof CategoryItem) {
+
+                //If it is a category then create a pop up
+                System.out.println(((CategoryItem) mJustDeletedToDoItem).getTitle());
+                String catName = ((CategoryItem) mJustDeletedToDoItem).getTitle();
+
+                Snackbar.make(mCoordLayout, "Are you sure you want to delete \"" + catName + "\" and all of its tasks? ", Snackbar.LENGTH_LONG)
+                        .setAction("UNDO", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                            }
+
+
+                        }).show();
+            }
+
+
         }
 
         @Override
