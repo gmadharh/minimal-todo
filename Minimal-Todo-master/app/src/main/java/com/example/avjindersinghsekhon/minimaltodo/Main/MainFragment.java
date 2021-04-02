@@ -192,6 +192,7 @@ private FloatingActionButton mCategoryFAB;
 
 
         mCoordLayout = (CoordinatorLayout) view.findViewById(R.id.myCoordinatorLayout);
+        System.out.println("FROM MAIN : " + mCoordLayout);
         mAddToDoItemFAB = (FloatingActionButton) view.findViewById(R.id.addToDoItemFAB);
 
         mAddToDoItemFAB.setOnClickListener(new View.OnClickListener() {

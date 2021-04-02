@@ -1,5 +1,7 @@
 package com.example.avjindersinghsekhon.minimaltodo.Main;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -14,6 +16,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,12 +52,12 @@ import java.util.Collections;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
+import static android.content.Context.ALARM_SERVICE;
 import static android.content.Context.MODE_PRIVATE;
 
 public class CategoryViewFragment extends AppDefaultFragment {
 
     private ArrayList<TaskItem> tasks;
-    private FloatingActionButton backButton;
     private RecyclerViewEmptySupport mRecyclerView;
     private CategoryItem currentCategory;
     private StoreRetrieveData storeRetrieveData;
@@ -66,7 +69,11 @@ public class CategoryViewFragment extends AppDefaultFragment {
 
     public static final String FILENAME = "todoitems.json";
 
+    /*Used for deletion*/
     private AnalyticsApplication app;
+    private TaskItem mJustDeletedToDoItem;
+    private int mIndexOfDeletedToDoItem;
+    private CoordinatorLayout mCoordLayout;
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -75,10 +82,21 @@ public class CategoryViewFragment extends AppDefaultFragment {
         super.onViewCreated(view, savedInstanceState);
         tasks = (ArrayList<TaskItem>) getActivity().getIntent().getSerializableExtra("tasks");
         currentCategory = (CategoryItem) getActivity().getIntent().getSerializableExtra("categoryClicked");
-
-        backButton = (FloatingActionButton) view.findViewById(R.id.backButton);
-
+        String theme = getActivity().getSharedPreferences(MainFragment.THEME_PREFERENCES, MODE_PRIVATE).getString(MainFragment.THEME_SAVED, MainFragment.LIGHTTHEME);
         mRecyclerView = (RecyclerViewEmptySupport) view.findViewById(R.id.toDoRecyclerView);
+        if (theme.equals(MainFragment.LIGHTTHEME)) {
+            mRecyclerView.setBackgroundColor(getResources().getColor(R.color.primary_lightest));
+        } else if (theme.equals(MainFragment.LIGHTREDTHEME)) {
+            mRecyclerView.setBackgroundColor(getResources().getColor(R.color.primary_lightest));
+        } else if (theme.equals(MainFragment.LIGHTYELLOWTHEME)) {
+            mRecyclerView.setBackgroundColor(getResources().getColor(R.color.primary_lightest));
+        } else if (theme.equals(MainFragment.LIGHTGREENTHEME)) {
+            mRecyclerView.setBackgroundColor(getResources().getColor(R.color.primary_lightest));
+        } else if (theme.equals(MainFragment.LIGHTBLUETHEME)) {
+            mRecyclerView.setBackgroundColor(getResources().getColor(R.color.primary_lightest));
+        } else if (theme.equals(MainFragment.LIGHTPINKTHEME)) {
+            mRecyclerView.setBackgroundColor(getResources().getColor(R.color.primary_lightest));
+        }
         mRecyclerView.setEmptyView(view.findViewById(R.id.toDoEmptyView));
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -87,22 +105,8 @@ public class CategoryViewFragment extends AppDefaultFragment {
         adapter = new CategoryViewFragment.BasicListAdapter(tasks);
         storeRetrieveData = new StoreRetrieveData(getContext(), FILENAME);
 
-        backButton.setOnClickListener(new View.OnClickListener() {
-
-            @SuppressWarnings("deprecation")
-            @Override
-            public void onClick(View v) {
-
-                try {
-                    storeRetrieveData.saveToFile(tasks);
-                } catch (JSONException | IOException e) {
-                    e.printStackTrace();
-                }
-
-                getActivity().setResult(RESULT_OK);
-                getActivity().finish();
-            }
-        });
+        mCoordLayout = (CoordinatorLayout) view.findViewById(R.id.myCoordinatorLayout);
+        System.out.println("FROM cat : " + mCoordLayout);
 
         customRecyclerScrollViewListener = new CustomRecyclerScrollViewListener() {
             @Override
@@ -160,18 +164,20 @@ public class CategoryViewFragment extends AppDefaultFragment {
 
         @Override
         public void onItemRemoved(final int position) {
-            //Remove this line if not using Google Analytics
             app = (AnalyticsApplication) getActivity().getApplication();
             app.send(this, "Action", "Swiped Todo Away");
 
-            /*mJustDeletedToDoItem = items.remove(position);
+            mJustDeletedToDoItem = items.remove(position);
             mIndexOfDeletedToDoItem = position;
             Intent i = new Intent(getContext(), TodoNotificationService.class);
             deleteAlarm(i, mJustDeletedToDoItem.getIdentifier().hashCode());
             notifyItemRemoved(position);
+            System.out.println("ITEMS: " + items);
 
 //            String toShow = (mJustDeletedToDoItem.getToDoText().length()>20)?mJustDeletedToDoItem.getToDoText().substring(0, 20)+"...":mJustDeletedToDoItem.getToDoText();
             String toShow = "Todo";
+
+
             Snackbar.make(mCoordLayout, "Deleted " + toShow, Snackbar.LENGTH_LONG)
                     .setAction("UNDO", new View.OnClickListener() {
                         @Override
@@ -189,8 +195,6 @@ public class CategoryViewFragment extends AppDefaultFragment {
                             notifyItemInserted(mIndexOfDeletedToDoItem);
                         }
                     }).show();
-
-             */
         }
 
         @Override
@@ -206,28 +210,28 @@ public class CategoryViewFragment extends AppDefaultFragment {
 //            if(item.getToDoDate()!=null && item.getToDoDate().before(new Date())){
 //                item.setToDoDate(null);
 //            }
-            //SharedPreferences sharedPreferences = getActivity().getSharedPreferences(THEME_PREFERENCES, MODE_PRIVATE);
+            SharedPreferences sharedPreferences = getActivity().getSharedPreferences(MainFragment.THEME_PREFERENCES, MODE_PRIVATE);
             //Background color for each to-do item. Necessary for night/day mode
             int bgColor;
             //color of title text in our to-do item. White for night mode, dark gray for day mode
             int todoTextColor;
-            /*
-            if (sharedPreferences.getString(THEME_SAVED, LIGHTTHEME).equals(LIGHTTHEME)) {
+
+            if (sharedPreferences.getString(MainFragment.THEME_SAVED, MainFragment.LIGHTTHEME).equals(MainFragment.LIGHTTHEME)) {
                 bgColor = Color.WHITE;
                 todoTextColor = getResources().getColor(R.color.secondary_text);
-            } else if (sharedPreferences.getString(THEME_SAVED, LIGHTTHEME).equals(LIGHTREDTHEME)) {
+            } else if (sharedPreferences.getString(MainFragment.THEME_SAVED, MainFragment.LIGHTTHEME).equals(MainFragment.LIGHTREDTHEME)) {
                 bgColor = Color.WHITE;
                 todoTextColor = getResources().getColor(R.color.secondary_text);
-            } else if (sharedPreferences.getString(THEME_SAVED, LIGHTTHEME).equals(LIGHTYELLOWTHEME)) {
+            } else if (sharedPreferences.getString(MainFragment.THEME_SAVED, MainFragment.LIGHTTHEME).equals(MainFragment.LIGHTYELLOWTHEME)) {
                 bgColor = Color.WHITE;
                 todoTextColor = getResources().getColor(R.color.secondary_text);
-            } else if (sharedPreferences.getString(THEME_SAVED, LIGHTTHEME).equals(LIGHTGREENTHEME)) {
+            } else if (sharedPreferences.getString(MainFragment.THEME_SAVED, MainFragment.LIGHTTHEME).equals(MainFragment.LIGHTGREENTHEME)) {
                 bgColor = Color.WHITE;
                 todoTextColor = getResources().getColor(R.color.secondary_text);
-            } else if (sharedPreferences.getString(THEME_SAVED, LIGHTTHEME).equals(LIGHTBLUETHEME)) {
+            } else if (sharedPreferences.getString(MainFragment.THEME_SAVED, MainFragment.LIGHTTHEME).equals(MainFragment.LIGHTBLUETHEME)) {
                 bgColor = Color.WHITE;
                 todoTextColor = getResources().getColor(R.color.secondary_text);
-            } else if (sharedPreferences.getString(THEME_SAVED, LIGHTTHEME).equals(LIGHTPINKTHEME)) {
+            } else if (sharedPreferences.getString(MainFragment.THEME_SAVED, MainFragment.LIGHTTHEME).equals(MainFragment.LIGHTPINKTHEME)) {
                 bgColor = Color.WHITE;
                 todoTextColor = getResources().getColor(R.color.secondary_text);
             } else {
@@ -235,7 +239,7 @@ public class CategoryViewFragment extends AppDefaultFragment {
                 todoTextColor = Color.WHITE;
             }
             holder.linearLayout.setBackgroundColor(bgColor);
-            */
+
             if(item instanceof ToDoItem && ((ToDoItem) item).getCategoryBelongs().equalsIgnoreCase(currentCategory.getTitle()))
             {
 
@@ -260,7 +264,7 @@ public class CategoryViewFragment extends AppDefaultFragment {
                 else {
                     holder.mToDoTextview.setText(((ToDoItem) item).getToDoText());
                 }
-                //holder.mToDoTextview.setTextColor(todoTextColor);
+                holder.mToDoTextview.setTextColor(todoTextColor);
 //              holder.mColorTextView.setBackgroundColor(Color.parseColor(item.getTodoColor()));
 
 //              TextDrawable myDrawable = TextDrawable.builder().buildRoundRect(item.getToDoText().substring(0,1),Color.RED, 10);
@@ -454,4 +458,32 @@ public class CategoryViewFragment extends AppDefaultFragment {
         }
 
     }
+
+    private boolean doesPendingIntentExist(Intent i, int requestCode) {
+        PendingIntent pi = PendingIntent.getService(getContext(), requestCode, i, PendingIntent.FLAG_NO_CREATE);
+        return pi != null;
+    }
+
+    private AlarmManager getAlarmManager() {
+        return (AlarmManager) getActivity().getSystemService(ALARM_SERVICE);
+    }
+
+    private void deleteAlarm(Intent i, int requestCode) {
+        if (doesPendingIntentExist(i, requestCode)) {
+            PendingIntent pi = PendingIntent.getService(getContext(), requestCode, i, PendingIntent.FLAG_NO_CREATE);
+            pi.cancel();
+            getAlarmManager().cancel(pi);
+            Log.d("OskarSchindler", "PI Cancelled " + doesPendingIntentExist(i, requestCode));
+        }
+    }
+
+    private void createAlarm(Intent i, int requestCode, long timeInMillis) {
+        AlarmManager am = getAlarmManager();
+        PendingIntent pi = PendingIntent.getService(getContext(), requestCode, i, PendingIntent.FLAG_UPDATE_CURRENT);
+        am.set(AlarmManager.RTC_WAKEUP, timeInMillis, pi);
+//        Log.d("OskarSchindler", "createAlarm "+requestCode+" time: "+timeInMillis+" PI "+pi.toString());
+    }
+
+
+
 }
