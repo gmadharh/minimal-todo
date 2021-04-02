@@ -1,5 +1,6 @@
 package com.example.avjindersinghsekhon.minimaltodo.Main;
 
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -13,6 +14,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +27,7 @@ import android.widget.TextView;
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.example.avjindersinghsekhon.minimaltodo.AddToDo.AddToDoActivity;
 import com.example.avjindersinghsekhon.minimaltodo.AddToDo.AddToDoFragment;
+import com.example.avjindersinghsekhon.minimaltodo.Analytics.AnalyticsApplication;
 import com.example.avjindersinghsekhon.minimaltodo.R;
 
 
@@ -43,6 +46,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import com.example.avjindersinghsekhon.minimaltodo.Main.MainFragment;
+
 import static android.app.Activity.RESULT_CANCELED;
 import static android.content.Context.MODE_PRIVATE;
 
@@ -59,10 +64,15 @@ public class CategoryViewFragment extends AppDefaultFragment {
     private static final int REQUEST_ID_TODO_ITEM = 100;
 
     public static final String FILENAME = "todoitems.json";
+    private AnalyticsApplication app;
+
+    private TaskItem mJustDeletedToDoItem;
+    private int mIndexOfDeletedToDoItem;
+    private CoordinatorLayout mCoordLayout;
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-
+        mCoordLayout = (CoordinatorLayout) view.findViewById(R.id.myCoordinatorLayoutCategory);
 
         super.onViewCreated(view, savedInstanceState);
         tasks = (ArrayList<TaskItem>) getActivity().getIntent().getSerializableExtra("tasks");
@@ -132,17 +142,24 @@ public class CategoryViewFragment extends AppDefaultFragment {
             notifyItemMoved(fromPosition, toPosition);
         }
 
+
         @Override
+        //START
         public void onItemRemoved(final int position) {
+
+            final MainFragment mainFragment = new MainFragment();
+
             //Remove this line if not using Google Analytics
-            /*
+            app = (AnalyticsApplication) getActivity().getApplication();
+
             app.send(this, "Action", "Swiped Todo Away");
 
             mJustDeletedToDoItem = items.remove(position);
             mIndexOfDeletedToDoItem = position;
             Intent i = new Intent(getContext(), TodoNotificationService.class);
-            deleteAlarm(i, mJustDeletedToDoItem.getIdentifier().hashCode());
-            notifyItemRemoved(position);
+          // mainFragment.deleteAlarm(i, mJustDeletedToDoItem.getIdentifier().hashCode());
+           notifyItemRemoved(position);
+
 
 //            String toShow = (mJustDeletedToDoItem.getToDoText().length()>20)?mJustDeletedToDoItem.getToDoText().substring(0, 20)+"...":mJustDeletedToDoItem.getToDoText();
             String toShow = "Todo";
@@ -158,13 +175,26 @@ public class CategoryViewFragment extends AppDefaultFragment {
                                 Intent i = new Intent(getContext(), TodoNotificationService.class);
                                 i.putExtra(TodoNotificationService.TODOTEXT, ((ToDoItem) mJustDeletedToDoItem).getToDoText());
                                 i.putExtra(TodoNotificationService.TODOUUID, mJustDeletedToDoItem.getIdentifier());
-                                createAlarm(i, mJustDeletedToDoItem.getIdentifier().hashCode(), ((ToDoItem) mJustDeletedToDoItem).getToDoDate().getTime());
+                                //mainFragment.createAlarm(i, mJustDeletedToDoItem.getIdentifier().hashCode(), ((ToDoItem) mJustDeletedToDoItem).getToDoDate().getTime());
                             }
                             notifyItemInserted(mIndexOfDeletedToDoItem);
                         }
-                    }).show();
 
-             */
+                    }).show();
+            //SAVES NEW ARRAYLIST TO FILE
+            saveData();
+
+
+        }
+        //END
+
+        private void saveData() {
+            try {
+                storeRetrieveData.saveToFile(tasks);
+            } catch (JSONException | IOException e) {
+                e.printStackTrace();
+            }
+
         }
 
         @Override

@@ -544,14 +544,14 @@ private FloatingActionButton mCategoryFAB;
         return pi != null;
     }
 
-    private void createAlarm(Intent i, int requestCode, long timeInMillis) {
+    public void createAlarm(Intent i, int requestCode, long timeInMillis) {
         AlarmManager am = getAlarmManager();
         PendingIntent pi = PendingIntent.getService(getContext(), requestCode, i, PendingIntent.FLAG_UPDATE_CURRENT);
         am.set(AlarmManager.RTC_WAKEUP, timeInMillis, pi);
 //        Log.d("OskarSchindler", "createAlarm "+requestCode+" time: "+timeInMillis+" PI "+pi.toString());
     }
 
-    private void deleteAlarm(Intent i, int requestCode) {
+    public void deleteAlarm(Intent i, int requestCode) {
         if (doesPendingIntentExist(i, requestCode)) {
             PendingIntent pi = PendingIntent.getService(getContext(), requestCode, i, PendingIntent.FLAG_NO_CREATE);
             pi.cancel();
@@ -614,13 +614,15 @@ private FloatingActionButton mCategoryFAB;
 
                             //Comment the line below if not using Google Analytics
                             app.send(this, "Action", "UNDO Pressed");
-                            items.add(mIndexOfDeletedToDoItem, mJustDeletedToDoItem);
+
                             if (((ToDoItem) mJustDeletedToDoItem).getToDoDate() != null && ((ToDoItem) mJustDeletedToDoItem).hasReminder()) {
                                 Intent i = new Intent(getContext(), TodoNotificationService.class);
                                 i.putExtra(TodoNotificationService.TODOTEXT, ((ToDoItem) mJustDeletedToDoItem).getToDoText());
                                 i.putExtra(TodoNotificationService.TODOUUID, mJustDeletedToDoItem.getIdentifier());
                                 createAlarm(i, mJustDeletedToDoItem.getIdentifier().hashCode(), ((ToDoItem) mJustDeletedToDoItem).getToDoDate().getTime());
                             }
+                            //Refreshes the list
+                            items.add(mIndexOfDeletedToDoItem, mJustDeletedToDoItem);
                             notifyItemInserted(mIndexOfDeletedToDoItem);
                         }
                     }).show();
@@ -637,7 +639,8 @@ private FloatingActionButton mCategoryFAB;
                         .setAction("UNDO", new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-
+                                items.add(mIndexOfDeletedToDoItem, mJustDeletedToDoItem);
+                                notifyItemInserted(mIndexOfDeletedToDoItem);
                             }
 
 
