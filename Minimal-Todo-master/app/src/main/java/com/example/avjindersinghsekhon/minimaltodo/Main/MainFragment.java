@@ -71,6 +71,7 @@ public class MainFragment extends AppDefaultFragment {
     private MainFragment.BasicListAdapter adapter;
     private static final int REQUEST_ID_TODO_ITEM = 100;
     private static final int REQUEST_ID_CAT_ITEM = 101;
+    private static final int REQUEST_ID_VIEW_CAT = 102;
     private TaskItem mJustDeletedToDoItem;
     private int mIndexOfDeletedToDoItem;
     public static final String DATE_TIME_FORMAT_12_HOUR = "MMM d, yyyy  h:mm a";
@@ -121,6 +122,7 @@ private FloatingActionButton mCategoryFAB;
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        System.out.println("onViewCreated");
         super.onViewCreated(view, savedInstanceState);
         app = (AnalyticsApplication) getActivity().getApplication();
 //        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
@@ -344,6 +346,8 @@ private FloatingActionButton mCategoryFAB;
     @Override
     public void onResume() {
         super.onResume();
+
+        System.out.println("onResume");
         app.send(this);
 
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHARED_PREF_DATA_SET_CHANGED, MODE_PRIVATE);
@@ -376,6 +380,8 @@ private FloatingActionButton mCategoryFAB;
 
     @Override
     public void onStart() {
+
+        System.out.println("onStart");
         app = (AnalyticsApplication) getActivity().getApplication();
         super.onStart();
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHARED_PREF_DATA_SET_CHANGED, MODE_PRIVATE);
@@ -532,6 +538,9 @@ private FloatingActionButton mCategoryFAB;
                 addToDataStore(item);
             }
 
+        }
+
+        else if(requestCode == REQUEST_ID_VIEW_CAT){
         }
     }
 
@@ -732,9 +741,9 @@ private FloatingActionButton mCategoryFAB;
                         //Toast.makeText(getContext(),"test",Toast.LENGTH_LONG).show();
                         Intent i = new Intent(getContext(),CategoryView.class);
                         i.putExtra("tasks",mToDoItemsArrayList);
-                        i.putExtra("categoryClicked",((CategoryItem) item));
+                        i.putExtra("categoryClicked", item);
 
-                        startActivity(i);
+                        startActivityForResult(i,REQUEST_ID_VIEW_CAT);
                     }
                 });
                 
@@ -825,6 +834,7 @@ private FloatingActionButton mCategoryFAB;
     @Override
     public void onPause() {
         super.onPause();
+        System.out.println("onPause");
         try {
             storeRetrieveData.saveToFile(mToDoItemsArrayList);
         } catch (JSONException | IOException e) {
@@ -835,7 +845,7 @@ private FloatingActionButton mCategoryFAB;
 
     @Override
     public void onDestroy() {
-
+        System.out.println("onDestroy");
         super.onDestroy();
         mRecyclerView.removeOnScrollListener(customRecyclerScrollViewListener);
     }

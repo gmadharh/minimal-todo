@@ -7,6 +7,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -18,11 +19,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.amulyakhare.textdrawable.TextDrawable;
+import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.example.avjindersinghsekhon.minimaltodo.AddToDo.AddToDoActivity;
 import com.example.avjindersinghsekhon.minimaltodo.AddToDo.AddToDoFragment;
 import com.example.avjindersinghsekhon.minimaltodo.R;
@@ -44,11 +47,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import static android.app.Activity.RESULT_CANCELED;
+import static android.app.Activity.RESULT_OK;
 import static android.content.Context.MODE_PRIVATE;
 
 public class CategoryViewFragment extends AppDefaultFragment {
 
     private ArrayList<TaskItem> tasks;
+    private FloatingActionButton backButton;
     private RecyclerViewEmptySupport mRecyclerView;
     private CategoryItem currentCategory;
     private StoreRetrieveData storeRetrieveData;
@@ -68,6 +73,7 @@ public class CategoryViewFragment extends AppDefaultFragment {
         tasks = (ArrayList<TaskItem>) getActivity().getIntent().getSerializableExtra("tasks");
         currentCategory = (CategoryItem) getActivity().getIntent().getSerializableExtra("categoryClicked");
 
+        backButton = (FloatingActionButton) view.findViewById(R.id.backButton);
 
         mRecyclerView = (RecyclerViewEmptySupport) view.findViewById(R.id.toDoRecyclerView);
         mRecyclerView.setEmptyView(view.findViewById(R.id.toDoEmptyView));
@@ -77,6 +83,23 @@ public class CategoryViewFragment extends AppDefaultFragment {
 
         adapter = new CategoryViewFragment.BasicListAdapter(tasks);
         storeRetrieveData = new StoreRetrieveData(getContext(), FILENAME);
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+
+            @SuppressWarnings("deprecation")
+            @Override
+            public void onClick(View v) {
+
+                try {
+                    storeRetrieveData.saveToFile(tasks);
+                } catch (JSONException | IOException e) {
+                    e.printStackTrace();
+                }
+
+                getActivity().setResult(RESULT_OK);
+                getActivity().finish();
+            }
+        });
 
         customRecyclerScrollViewListener = new CustomRecyclerScrollViewListener() {
             @Override
@@ -383,6 +406,8 @@ public class CategoryViewFragment extends AppDefaultFragment {
         mRecyclerView.removeOnScrollListener(customRecyclerScrollViewListener);
     }
 
+
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
@@ -413,6 +438,12 @@ public class CategoryViewFragment extends AppDefaultFragment {
                         adapter.notifyDataSetChanged();
                         break;
                     }
+                }
+
+                try {
+                    storeRetrieveData.saveToFile(tasks);
+                } catch (JSONException | IOException e) {
+                    e.printStackTrace();
                 }
 
             }
