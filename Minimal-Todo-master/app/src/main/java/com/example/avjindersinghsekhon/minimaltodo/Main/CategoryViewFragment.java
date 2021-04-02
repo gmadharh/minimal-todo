@@ -28,6 +28,7 @@ import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.example.avjindersinghsekhon.minimaltodo.AddToDo.AddToDoActivity;
 import com.example.avjindersinghsekhon.minimaltodo.AddToDo.AddToDoFragment;
+import com.example.avjindersinghsekhon.minimaltodo.Analytics.AnalyticsApplication;
 import com.example.avjindersinghsekhon.minimaltodo.R;
 
 
@@ -64,6 +65,8 @@ public class CategoryViewFragment extends AppDefaultFragment {
     private static final int REQUEST_ID_TODO_ITEM = 100;
 
     public static final String FILENAME = "todoitems.json";
+
+    private AnalyticsApplication app;
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -158,10 +161,10 @@ public class CategoryViewFragment extends AppDefaultFragment {
         @Override
         public void onItemRemoved(final int position) {
             //Remove this line if not using Google Analytics
-            /*
+            app = (AnalyticsApplication) getActivity().getApplication();
             app.send(this, "Action", "Swiped Todo Away");
 
-            mJustDeletedToDoItem = items.remove(position);
+            /*mJustDeletedToDoItem = items.remove(position);
             mIndexOfDeletedToDoItem = position;
             Intent i = new Intent(getContext(), TodoNotificationService.class);
             deleteAlarm(i, mJustDeletedToDoItem.getIdentifier().hashCode());
