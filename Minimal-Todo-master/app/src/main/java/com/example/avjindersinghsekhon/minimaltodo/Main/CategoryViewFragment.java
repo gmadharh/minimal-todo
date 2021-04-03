@@ -90,13 +90,16 @@ public class CategoryViewFragment extends AppDefaultFragment {
             @Override
             public void onClick(View v) {
 
+                Intent i = new Intent();
+                i.putExtra("newArray",tasks);
+
                 try {
                     storeRetrieveData.saveToFile(tasks);
                 } catch (JSONException | IOException e) {
                     e.printStackTrace();
                 }
 
-                getActivity().setResult(RESULT_OK);
+                getActivity().setResult(RESULT_OK,i);
                 getActivity().finish();
             }
         });
