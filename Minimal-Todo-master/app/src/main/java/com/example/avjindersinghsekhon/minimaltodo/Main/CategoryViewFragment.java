@@ -1,11 +1,16 @@
 package com.example.avjindersinghsekhon.minimaltodo.Main;
 
+import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
@@ -26,6 +31,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.support.v7.widget.Toolbar;
 
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
@@ -64,6 +70,8 @@ public class CategoryViewFragment extends AppDefaultFragment {
     private CategoryViewFragment.BasicListAdapter adapter;
     public ItemTouchHelper itemTouchHelper;
     private CustomRecyclerScrollViewListener customRecyclerScrollViewListener;
+    private Drawable backArrow;
+    private Toolbar toolbar;
 
     private static final int REQUEST_ID_TODO_ITEM = 100;
 
@@ -75,6 +83,7 @@ public class CategoryViewFragment extends AppDefaultFragment {
     private int mIndexOfDeletedToDoItem;
     private CoordinatorLayout mCoordLayout;
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 
@@ -106,6 +115,29 @@ public class CategoryViewFragment extends AppDefaultFragment {
         storeRetrieveData = new StoreRetrieveData(getContext(), FILENAME);
 
         mCoordLayout = (CoordinatorLayout) view.findViewById(R.id.myCoordinatorLayout);
+
+        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                System.out.println("clicked the arrow");
+
+                Intent i = new Intent();
+                i.putExtra("newArray",tasks);
+
+                try {
+                    storeRetrieveData.saveToFile(tasks);
+                } catch (JSONException | IOException e) {
+                    e.printStackTrace();
+                }
+
+                getActivity().setResult(RESULT_OK,i);
+                getActivity().finish();
+
+            }
+        });
 
         customRecyclerScrollViewListener = new CustomRecyclerScrollViewListener() {
             @Override
