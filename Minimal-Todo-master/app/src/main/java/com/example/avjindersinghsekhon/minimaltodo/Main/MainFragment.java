@@ -64,6 +64,7 @@ import static android.content.Context.MODE_PRIVATE;
 public class MainFragment extends AppDefaultFragment {
 
     private RecyclerViewEmptySupport mRecyclerView;
+    private ArrayList<TaskItem> items;
     private FloatingActionButton mAddToDoItemFAB;
     private ArrayList<TaskItem> mToDoItemsArrayList;
     private CoordinatorLayout mCoordLayout;
@@ -347,7 +348,7 @@ private FloatingActionButton mCategoryFAB;
     @Override
     public void onResume() {
         super.onResume();
-
+        adapter.notifyDataSetChanged();
         System.out.println("onResume");
         app.send(this);
 
@@ -383,6 +384,14 @@ private FloatingActionButton mCategoryFAB;
     public void onStart() {
 
         System.out.println("onStart");
+        for (int i = 0;i < mToDoItemsArrayList.size();i++)
+        {
+            if (mToDoItemsArrayList.get(i) instanceof ToDoItem)
+            {
+                System.out.println("NAME: " + ((ToDoItem) mToDoItemsArrayList.get(i)).getToDoText() + " Category: " +  ((ToDoItem) mToDoItemsArrayList.get(i)).getCategoryBelongs());
+            }
+
+        }
         app = (AnalyticsApplication) getActivity().getApplication();
         super.onStart();
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHARED_PREF_DATA_SET_CHANGED, MODE_PRIVATE);
@@ -542,6 +551,13 @@ private FloatingActionButton mCategoryFAB;
         }
 
         else if(requestCode == REQUEST_ID_VIEW_CAT){
+
+            mToDoItemsArrayList = (ArrayList<TaskItem>) data.getSerializableExtra("newArray");
+            items = mToDoItemsArrayList;
+            //adapter = new MainFragment.BasicListAdapter(mToDoItemsArrayList);
+            adapter.notifyDataSetChanged();
+
+
         }
     }
 
@@ -588,7 +604,7 @@ private FloatingActionButton mCategoryFAB;
     }
 
     public class BasicListAdapter extends RecyclerView.Adapter<BasicListAdapter.ViewHolder> implements ItemTouchHelperClass.ItemTouchHelperAdapter {
-        private ArrayList<TaskItem> items;
+
 
         @Override
         public void onItemMoved(int fromPosition, int toPosition) {
@@ -646,6 +662,8 @@ private FloatingActionButton mCategoryFAB;
         public void onBindViewHolder(final BasicListAdapter.ViewHolder holder, final int position) {
             final TaskItem item = items.get(position);
 
+            System.out.println("onBindViewHolder");
+
 //            if(item.getToDoDate()!=null && item.getToDoDate().before(new Date())){
 //                item.setToDoDate(null);
 //            }
@@ -680,6 +698,7 @@ private FloatingActionButton mCategoryFAB;
 
             if(item instanceof ToDoItem && ((ToDoItem) item).getCategoryBelongs().equalsIgnoreCase("None"))
             {
+                System.out.println("onBindViewHolder: " + ((ToDoItem) item).getToDoText());
 
                 holder.linearLayout.setVisibility(View.VISIBLE);
 
@@ -762,9 +781,9 @@ private FloatingActionButton mCategoryFAB;
             return items.size();
         }
 
-        BasicListAdapter(ArrayList<TaskItem> items) {
+        BasicListAdapter(ArrayList<TaskItem> itemss) {
 
-            this.items = items;
+            items = itemss;
         }
 
 

@@ -106,7 +106,6 @@ public class CategoryViewFragment extends AppDefaultFragment {
         storeRetrieveData = new StoreRetrieveData(getContext(), FILENAME);
 
         mCoordLayout = (CoordinatorLayout) view.findViewById(R.id.myCoordinatorLayout);
-        System.out.println("FROM cat : " + mCoordLayout);
 
         customRecyclerScrollViewListener = new CustomRecyclerScrollViewListener() {
             @Override
