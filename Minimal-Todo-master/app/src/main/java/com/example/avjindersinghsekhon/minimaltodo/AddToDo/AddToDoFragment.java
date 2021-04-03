@@ -135,6 +135,8 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 
         theme = getActivity().getSharedPreferences(MainFragment.THEME_PREFERENCES, MODE_PRIVATE).getString(MainFragment.THEME_SAVED, MainFragment.LIGHTTHEME);
 
+
+
         if(theme.equals(MainFragment.LIGHTTHEME)) {
             getActivity().setTheme(R.style.CustomStyle_LightTheme);
         } else if (theme.equals(MainFragment.DARKTHEME)) {
@@ -212,6 +214,9 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
                 CategoryItem cItem = (CategoryItem) parent.getItemAtPosition(position);
 
                 mUserToDoItem.setCategoryBelongs(cItem.getTitle());
+
+                //Sets the spinners position depending on what the user chose (task #83)
+                mUserToDoItem.setSpinnerPosition(position);
             }
 
             @Override
@@ -258,6 +263,9 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
         mUserHasPriority = mUserToDoItem.isPriority();
         mUserReminderDate = mUserToDoItem.getToDoDate();
         mUserColor = mUserToDoItem.getTodoColor();
+
+        //Sets the task's category spinner to the position saved in that task earlier (task #83)
+        categorySpinner.setSelection(mUserToDoItem.getSpinnerPosition());
 
 
 //        if(mUserToDoItem.getLastEdited()==null) {
