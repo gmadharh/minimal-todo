@@ -116,12 +116,13 @@ public class CategoryViewFragment extends AppDefaultFragment {
 
         mCoordLayout = (CoordinatorLayout) view.findViewById(R.id.myCoordinatorLayout);
 
-        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+        toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                //let main fragment know we need to recreate the page
+                MainFragment.navBack = true;
                 System.out.println("clicked the arrow");
 
                 Intent i = new Intent();

@@ -59,7 +59,7 @@ public class CategoryView extends AppDefaultActivity {
         setContentView(R.layout.activity_category);
 
         //set the toolbar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         //add a back button to the toolbar

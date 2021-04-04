@@ -108,6 +108,8 @@ public class MainFragment extends AppDefaultFragment {
     public static final String DARKPINKTHEME = "com.avjindersekon.darkpinktheme";
     public static final String LIGHTPINKTHEME = "com.avjindersekon.lightpinktheme";
 
+    public static boolean navBack; //when this is set, it lets us know to refresh the page 
+
 
     private AnalyticsApplication app;
     private String[] testStrings = {"Clean my room",
@@ -375,6 +377,14 @@ private FloatingActionButton mCategoryFAB;
             editor.putBoolean(RECREATE_ACTIVITY, false);
             editor.apply();
             getActivity().recreate();
+        }
+
+        //navBack lets us know if the back button was pressed in category view
+        if(navBack) {
+            //recreate the activity to refresh the page
+            getActivity().recreate();
+            //make sure this doesnt loop again
+            navBack = false;
         }
 
 
