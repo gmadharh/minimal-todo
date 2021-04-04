@@ -25,6 +25,8 @@ public class CategoryView extends AppDefaultActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+
+        //set the page's theme
         String theme = getSharedPreferences(MainFragment.THEME_PREFERENCES, MODE_PRIVATE).getString(MainFragment.THEME_SAVED, MainFragment.LIGHTTHEME);
 
         if(theme.equals(MainFragment.LIGHTTHEME)) {
@@ -56,9 +58,11 @@ public class CategoryView extends AppDefaultActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_category);
 
+        //set the toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        //add a back button to the toolbar
         final Drawable backArrow = getResources().getDrawable(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
         if (backArrow != null) {
             backArrow.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
@@ -69,6 +73,7 @@ public class CategoryView extends AppDefaultActivity {
             getSupportActionBar().setHomeAsUpIndicator(backArrow);
         }
 
+        //set up the back button to navigate to the previous page
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

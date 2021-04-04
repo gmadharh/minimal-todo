@@ -198,23 +198,22 @@ public class CategoryViewFragment extends AppDefaultFragment {
             app = (AnalyticsApplication) getActivity().getApplication();
             app.send(this, "Action", "Swiped Todo Away");
 
+            //remove the task and store it so that if the user wants to undo it can be retrieved
             mJustDeletedToDoItem = items.remove(position);
+            //store the position
             mIndexOfDeletedToDoItem = position;
             Intent i = new Intent(getContext(), TodoNotificationService.class);
+            //remove the alarm
             deleteAlarm(i, mJustDeletedToDoItem.getIdentifier().hashCode());
             notifyItemRemoved(position);
-            System.out.println("ITEMS: " + items);
 
-//            String toShow = (mJustDeletedToDoItem.getToDoText().length()>20)?mJustDeletedToDoItem.getToDoText().substring(0, 20)+"...":mJustDeletedToDoItem.getToDoText();
+            //display snackbar undo button
             String toShow = "Todo";
-
-
             Snackbar.make(mCoordLayout, "Deleted " + toShow, Snackbar.LENGTH_LONG)
                     .setAction("UNDO", new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-
-                            //Comment the line below if not using Google Analytics
+                            //put the task back
                             app.send(this, "Action", "UNDO Pressed");
                             items.add(mIndexOfDeletedToDoItem, mJustDeletedToDoItem);
                             if (((ToDoItem) mJustDeletedToDoItem).getToDoDate() != null && ((ToDoItem) mJustDeletedToDoItem).hasReminder()) {
