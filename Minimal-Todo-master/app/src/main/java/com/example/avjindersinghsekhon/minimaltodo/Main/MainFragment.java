@@ -108,7 +108,7 @@ public class MainFragment extends AppDefaultFragment {
     public static final String DARKPINKTHEME = "com.avjindersekon.darkpinktheme";
     public static final String LIGHTPINKTHEME = "com.avjindersekon.lightpinktheme";
 
-    public static boolean navBack; //when this is set, it lets us know to refresh the page 
+    public static boolean navBack; //when this is set, it lets us know to refresh the page
 
 
     private AnalyticsApplication app;

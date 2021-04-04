@@ -13,6 +13,7 @@ import android.view.View;
 
 import com.example.avjindersinghsekhon.minimaltodo.AppDefault.AppDefaultActivity;
 import com.example.avjindersinghsekhon.minimaltodo.R;
+import com.example.avjindersinghsekhon.minimaltodo.Utility.CategoryItem;
 
 public class CategoryView extends AppDefaultActivity {
 
@@ -61,6 +62,10 @@ public class CategoryView extends AppDefaultActivity {
         //set the toolbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        //set the toolbar title to the category's name
+        CategoryItem currentCategory = (CategoryItem) getIntent().getSerializableExtra("categoryClicked");
+        getSupportActionBar().setTitle(String.valueOf(currentCategory.getTitle()));
 
         //add a back button to the toolbar
         final Drawable backArrow = getResources().getDrawable(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
