@@ -56,6 +56,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Iterator;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.content.Context.ALARM_SERVICE;
@@ -632,12 +633,26 @@ private FloatingActionButton mCategoryFAB;
             if (mJustDeletedToDoItem instanceof CategoryItem) {
 
                 //If it is a category then create a pop up
-                System.out.println(((CategoryItem) mJustDeletedToDoItem).getTitle());
                 String catName = ((CategoryItem) mJustDeletedToDoItem).getTitle();
+                System.out.println(catName);
+
+                for (TaskItem it : items) {
+                    if(it instanceof ToDoItem){
+                       if (((ToDoItem) it).getCategoryBelongs().equals(catName)) {
+
+                        //workaround instead of deleting from the items list
+                        ((ToDoItem) it).setCategoryBelongs("Null");
+                    }
+                    }
+
+
+                }
+
 
                 Snackbar.make(mCoordLayout, "Are you sure you want to delete \"" + catName + "\" and all of its tasks? ", Snackbar.LENGTH_LONG)
                         .setAction("UNDO", new View.OnClickListener() {
                             @Override
+                            // make undo work
                             public void onClick(View v) {
                                 items.add(mIndexOfDeletedToDoItem, mJustDeletedToDoItem);
                                 notifyItemInserted(mIndexOfDeletedToDoItem);
