@@ -633,7 +633,7 @@ private FloatingActionButton mCategoryFAB;
             if (mJustDeletedToDoItem instanceof CategoryItem) {
 
                 //If it is a category then create a pop up
-                String catName = ((CategoryItem) mJustDeletedToDoItem).getTitle();
+                final String catName = ((CategoryItem) mJustDeletedToDoItem).getTitle();
                 System.out.println(catName);
 
                 for (TaskItem it : items) {
@@ -656,6 +656,15 @@ private FloatingActionButton mCategoryFAB;
                             public void onClick(View v) {
                                 items.add(mIndexOfDeletedToDoItem, mJustDeletedToDoItem);
                                 notifyItemInserted(mIndexOfDeletedToDoItem);
+                                for (TaskItem it : items) {
+                                    if(it instanceof ToDoItem){
+                                        if (((ToDoItem) it).getCategoryBelongs().equals("Null")) {
+                                            ((ToDoItem) it).setCategoryBelongs(catName);
+                                        }
+                                    }
+
+
+                                }
                             }
 
 
