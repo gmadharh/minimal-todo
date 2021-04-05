@@ -119,4 +119,77 @@ public class TestCategoryItem extends TestCase {
         }
     }
 
+    /**
+     * Simple test to check if removing a task from an existing category to no category works
+     */
+    public void testRemovingTaskFromCategory(){
+
+        ToDoItem item = new ToDoItem();
+        CategoryItem categoryItem = new CategoryItem(CAT_TITLE);
+        CategoryItem noneCategory = new CategoryItem("None");
+
+        item.setCategoryBelongs(categoryItem.getTitle());
+        item.setCategoryBelongs(noneCategory.getTitle());
+
+        assertEquals(item.getCategoryBelongs(),noneCategory.getTitle());
+
+    }
+
+    /**
+     * Simple test to check if moving a task from one category to another works
+     */
+    public void testMovingTaskBetweenCategories(){
+
+        ToDoItem item = new ToDoItem();
+        CategoryItem categoryItem = new CategoryItem("Category1");
+        CategoryItem categoryItem2 = new CategoryItem("Category2");
+
+        item.setCategoryBelongs(categoryItem.getTitle());
+        item.setCategoryBelongs(categoryItem2.getTitle());
+
+        assertEquals(item.getCategoryBelongs(),categoryItem2.getTitle());
+    }
+
+    /**
+     * Ensure that when removing a task from a category and converting it to a JSON, it has no category
+     */
+    public void testRemovingTaskFromCategoryJSON(){
+
+        ToDoItem item = new ToDoItem();
+        CategoryItem categoryItem = new CategoryItem(CAT_TITLE);
+        CategoryItem noneCategory = new CategoryItem("None");
+
+        item.setCategoryBelongs(categoryItem.getTitle());
+        item.setCategoryBelongs(noneCategory.getTitle());
+
+        try {
+            JSONObject json = item.toJSON();
+            assertEquals(noneCategory.getTitle(), json.getString("todocategory"));
+        } catch (JSONException e) {
+            fail("Exception thrown during test execution: " + e.getMessage());
+        }
+
+    }
+
+    /**
+     * Ensure that when moving a task between categories and converting it to a JSON, it has the new category
+     */
+    public void testMovingTaskBetweenCategoriesJSON(){
+
+        ToDoItem item = new ToDoItem();
+        CategoryItem categoryItem = new CategoryItem("Category1");
+        CategoryItem categoryItem2 = new CategoryItem("Category2");
+
+        item.setCategoryBelongs(categoryItem.getTitle());
+        item.setCategoryBelongs(categoryItem2.getTitle());
+
+        try {
+            JSONObject json = item.toJSON();
+            assertEquals(categoryItem2.getTitle(), json.getString("todocategory"));
+        } catch (JSONException e) {
+            fail("Exception thrown during test execution: " + e.getMessage());
+        }
+
+    }
+
 }

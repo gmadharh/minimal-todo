@@ -13,8 +13,11 @@ public class AddToDoActivity extends AppDefaultActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //get the theme
         String theme = getSharedPreferences(MainFragment.THEME_PREFERENCES, MODE_PRIVATE).getString(MainFragment.THEME_SAVED, MainFragment.LIGHTTHEME);
 
+        //set the theme
         if(theme.equals(MainFragment.LIGHTTHEME)) {
             setTheme(R.style.CustomStyle_LightTheme);
         } else if (theme.equals(MainFragment.DARKTHEME)) {

@@ -38,10 +38,13 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
             //We tell our MainLayout to recreate itself because mode has changed
             themeEditor.putBoolean(MainFragment.RECREATE_ACTIVITY, true);
 
+            //find whether or not dark mode is selected
             CheckBoxPreference checkBoxPreference = (CheckBoxPreference) findPreference(preferenceKeys.night_mode_pref_key);
 
+            //get the id of the selected theme radio button
             int themeID = getActivity().getSharedPreferences("theme", Context.MODE_PRIVATE).getInt("sel_option", 0);
 
+            //set the theme based off the radio button selected and the dark mode button
             switch (themeID) {
                 case 0: //set to red
                     if (checkBoxPreference.isChecked()) {
@@ -86,8 +89,10 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                     }
             }
 
+            //apply the changes
             themeEditor.apply();
 
+            //recreate the activity to update the theme
             getActivity().recreate();
         }
     }

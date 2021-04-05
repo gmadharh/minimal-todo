@@ -65,6 +65,7 @@ import static android.content.Context.MODE_PRIVATE;
 public class MainFragment extends AppDefaultFragment {
 
     private RecyclerViewEmptySupport mRecyclerView;
+    private ArrayList<TaskItem> items;
     private FloatingActionButton mAddToDoItemFAB;
     private ArrayList<TaskItem> mToDoItemsArrayList;
     private CoordinatorLayout mCoordLayout;
@@ -72,6 +73,7 @@ public class MainFragment extends AppDefaultFragment {
     private MainFragment.BasicListAdapter adapter;
     private static final int REQUEST_ID_TODO_ITEM = 100;
     private static final int REQUEST_ID_CAT_ITEM = 101;
+    private static final int REQUEST_ID_VIEW_CAT = 102;
     private TaskItem mJustDeletedToDoItem;
     private int mIndexOfDeletedToDoItem;
     public static final String DATE_TIME_FORMAT_12_HOUR = "MMM d, yyyy  h:mm a";
@@ -107,6 +109,8 @@ public class MainFragment extends AppDefaultFragment {
     public static final String DARKPINKTHEME = "com.avjindersekon.darkpinktheme";
     public static final String LIGHTPINKTHEME = "com.avjindersekon.lightpinktheme";
 
+    public static boolean navBack; //when this is set, it lets us know to refresh the page
+
 
     private AnalyticsApplication app;
     private String[] testStrings = {"Clean my room",
@@ -122,6 +126,7 @@ private FloatingActionButton mCategoryFAB;
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        System.out.println("onViewCreated");
         super.onViewCreated(view, savedInstanceState);
         app = (AnalyticsApplication) getActivity().getApplication();
 //        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
@@ -191,6 +196,7 @@ private FloatingActionButton mCategoryFAB;
 
 
         mCoordLayout = (CoordinatorLayout) view.findViewById(R.id.myCoordinatorLayout);
+        System.out.println("FROM MAIN : " + mCoordLayout);
         mAddToDoItemFAB = (FloatingActionButton) view.findViewById(R.id.addToDoItemFAB);
 
         mAddToDoItemFAB.setOnClickListener(new View.OnClickListener() {
@@ -345,6 +351,8 @@ private FloatingActionButton mCategoryFAB;
     @Override
     public void onResume() {
         super.onResume();
+        adapter.notifyDataSetChanged();
+        System.out.println("onResume");
         app.send(this);
 
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHARED_PREF_DATA_SET_CHANGED, MODE_PRIVATE);
@@ -372,11 +380,29 @@ private FloatingActionButton mCategoryFAB;
             getActivity().recreate();
         }
 
+        //navBack lets us know if the back button was pressed in category view
+        if(navBack) {
+            //recreate the activity to refresh the page
+            getActivity().recreate();
+            //make sure this doesnt loop again
+            navBack = false;
+        }
+
 
     }
 
     @Override
     public void onStart() {
+
+        System.out.println("onStart");
+        for (int i = 0;i < mToDoItemsArrayList.size();i++)
+        {
+            if (mToDoItemsArrayList.get(i) instanceof ToDoItem)
+            {
+                System.out.println("NAME: " + ((ToDoItem) mToDoItemsArrayList.get(i)).getToDoText() + " Category: " +  ((ToDoItem) mToDoItemsArrayList.get(i)).getCategoryBelongs());
+            }
+
+        }
         app = (AnalyticsApplication) getActivity().getApplication();
         super.onStart();
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHARED_PREF_DATA_SET_CHANGED, MODE_PRIVATE);
@@ -534,6 +560,22 @@ private FloatingActionButton mCategoryFAB;
             }
 
         }
+
+        // Else the user clicked a category
+        // Get the updated arraylist back from the Category to see if there were any changes to the tasks
+        else if(requestCode == REQUEST_ID_VIEW_CAT){
+
+            // set the main arraylist to the updated one
+            mToDoItemsArrayList = (ArrayList<TaskItem>) data.getSerializableExtra("newArray");
+
+            // update the one in the recycler view as well
+            items = mToDoItemsArrayList;
+
+            // notify there was a change so we can refresh
+            adapter.notifyDataSetChanged();
+
+
+        }
     }
 
     private AlarmManager getAlarmManager() {
@@ -579,7 +621,7 @@ private FloatingActionButton mCategoryFAB;
     }
 
     public class BasicListAdapter extends RecyclerView.Adapter<BasicListAdapter.ViewHolder> implements ItemTouchHelperClass.ItemTouchHelperAdapter {
-        private ArrayList<TaskItem> items;
+
 
         @Override
         public void onItemMoved(int fromPosition, int toPosition) {
@@ -684,6 +726,8 @@ private FloatingActionButton mCategoryFAB;
         public void onBindViewHolder(final BasicListAdapter.ViewHolder holder, final int position) {
             final TaskItem item = items.get(position);
 
+            System.out.println("onBindViewHolder");
+
 //            if(item.getToDoDate()!=null && item.getToDoDate().before(new Date())){
 //                item.setToDoDate(null);
 //            }
@@ -716,8 +760,12 @@ private FloatingActionButton mCategoryFAB;
             }
             holder.linearLayout.setBackgroundColor(bgColor);
 
+            /**
+             * If the todoitem belongs to the category "None" (which is just no category, the main page), then display it
+             */
             if(item instanceof ToDoItem && ((ToDoItem) item).getCategoryBelongs().equalsIgnoreCase("None"))
             {
+                System.out.println("onBindViewHolder: " + ((ToDoItem) item).getToDoText());
 
                 holder.linearLayout.setVisibility(View.VISIBLE);
 
@@ -780,13 +828,17 @@ private FloatingActionButton mCategoryFAB;
                         //Toast.makeText(getContext(),"test",Toast.LENGTH_LONG).show();
                         Intent i = new Intent(getContext(),CategoryView.class);
                         i.putExtra("tasks",mToDoItemsArrayList);
-                        i.putExtra("categoryClicked",((CategoryItem) item));
+                        i.putExtra("categoryClicked", item);
 
-                        startActivity(i);
+                        startActivityForResult(i,REQUEST_ID_VIEW_CAT);
                     }
                 });
                 
             }
+
+            /**
+             * Else don't display the task, if it doesn't belong to the main page
+             */
             else{
                 holder.linearLayout.setVisibility(View.GONE);
                 holder.itemView.setLayoutParams(new LinearLayout.LayoutParams(0,0));
@@ -800,9 +852,9 @@ private FloatingActionButton mCategoryFAB;
             return items.size();
         }
 
-        BasicListAdapter(ArrayList<TaskItem> items) {
+        BasicListAdapter(ArrayList<TaskItem> itemss) {
 
-            this.items = items;
+            items = itemss;
         }
 
 
@@ -873,6 +925,7 @@ private FloatingActionButton mCategoryFAB;
     @Override
     public void onPause() {
         super.onPause();
+        System.out.println("onPause");
         try {
             storeRetrieveData.saveToFile(mToDoItemsArrayList);
         } catch (JSONException | IOException e) {
@@ -883,7 +936,7 @@ private FloatingActionButton mCategoryFAB;
 
     @Override
     public void onDestroy() {
-
+        System.out.println("onDestroy");
         super.onDestroy();
         mRecyclerView.removeOnScrollListener(customRecyclerScrollViewListener);
     }

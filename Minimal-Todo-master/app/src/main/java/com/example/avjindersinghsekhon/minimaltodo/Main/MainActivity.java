@@ -20,7 +20,10 @@ public class MainActivity extends AppDefaultActivity {
         super.onCreate(savedInstanceState);
         final android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar);
 
+        //get the theme
         String theme = getSharedPreferences(MainFragment.THEME_PREFERENCES, MODE_PRIVATE).getString(MainFragment.THEME_SAVED, MainFragment.LIGHTTHEME);
+
+        //set the theme and the background colour of the toolbar
         if(theme.equals(MainFragment.LIGHTTHEME)) {
             setTheme(R.style.CustomStyle_LightTheme);
             toolbar.setBackgroundColor(getResources().getColor(R.color.primaryGrey));
@@ -59,6 +62,7 @@ public class MainActivity extends AppDefaultActivity {
             toolbar.setBackgroundColor(getResources().getColor(R.color.primary_darkPink));
         }
 
+        //set the toolbar text colour to white for contrast against background
         toolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();

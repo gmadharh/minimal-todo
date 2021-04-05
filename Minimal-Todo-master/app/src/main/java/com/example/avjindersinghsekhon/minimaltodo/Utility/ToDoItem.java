@@ -39,6 +39,8 @@ public class ToDoItem extends TaskItem {
     private static final String ITEMTYPE = "itemtype";
     private final String TASKTYPE = "task";
 
+    //A new variable for that saves spinner positions (task #83)
+    private int spinnerPosition;
 
     public ToDoItem(String todoBody,String tododescription,String todoLink,boolean hasReminder, Date toDoDate,boolean hasPriority) {
         mToDoText = todoBody;
@@ -51,6 +53,9 @@ public class ToDoItem extends TaskItem {
         mToDoDescription = tododescription;
         mTodoColor = 1677725;
         mTodoIdentifier = UUID.randomUUID();
+
+        //Set the default position of the spinner to 0  (task #83)
+        spinnerPosition = 0;
     }
 
     // setter for title
@@ -76,6 +81,9 @@ public class ToDoItem extends TaskItem {
         jsonObject.put(TODOIDENTIFIER, mTodoIdentifier.toString());
         jsonObject.put(ITEMTYPE,TASKTYPE);
 
+        //Save the position into the jsonObject (task #83)
+        jsonObject.put("position", spinnerPosition);
+
         return jsonObject;
     }
 
@@ -100,6 +108,20 @@ public class ToDoItem extends TaskItem {
             mToDoDate = new Date(jsonObject.getLong(TODODATE));
         }
 
+        // Get the spinner position from inside the jsonObject (task #83)
+        spinnerPosition = jsonObject.getInt("position");
+
+    }
+
+    // Sets the task's spinner position
+    public void setSpinnerPosition(int pos) {
+        spinnerPosition = pos;
+
+    }
+
+    // Gets the task's spinner position
+    public int getSpinnerPosition() {
+        return this.spinnerPosition;
     }
 
     @Override
