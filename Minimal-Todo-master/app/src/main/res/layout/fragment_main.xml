@@ -64,7 +64,7 @@
 
          <!--Added new button for the folder-->
         <android.support.design.widget.FloatingActionButton
-            android:src="@drawable/folder"
+            android:src="@drawable/white_folder"
             android:id="@+id/addCategoryFAB"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -11,6 +11,8 @@ public class ToDoItem extends TaskItem {
     private boolean mHasReminder;
     //add description
     private String mToDoDescription;
+
+    private String catIdent;
     // add a link
     private String mLink;
     // boolean for priority
@@ -21,6 +23,7 @@ public class ToDoItem extends TaskItem {
     private int mTodoColor;
     private Date mToDoDate;
     private UUID mTodoIdentifier;
+    private CategoryItem categoryBelongs;
     //add description
     private static final String TODODESCRIPTION = "tododescription";
     private static final String TODOLINK = "todolink";
@@ -31,41 +34,29 @@ public class ToDoItem extends TaskItem {
     private static final String TODODATE = "tododate";
     private static final String TODOIDENTIFIER = "todoidentifier";
     private static final String TODOPRIORITY = "todopriority";
+    private static final String TODOCATEGORY = "todocategory";
 
     private static final String ITEMTYPE = "itemtype";
     private final String TASKTYPE = "task";
 
+    //A new variable for that saves spinner positions (task #83)
+    private int spinnerPosition;
 
     public ToDoItem(String todoBody,String tododescription,String todoLink,boolean hasReminder, Date toDoDate,boolean hasPriority) {
         mToDoText = todoBody;
         mHasReminder = hasReminder;
         mToDoDate = toDoDate;
         mLink = todoLink;
+        categoryBelongs = new CategoryItem();
+        catIdent = "None";
         mPriority = hasPriority;
         mToDoDescription = tododescription;
         mTodoColor = 1677725;
         mTodoIdentifier = UUID.randomUUID();
+
+        //Set the default position of the spinner to 0  (task #83)
+        spinnerPosition = 0;
     }
-
-/*    // constructor which takes in a jsonObject
-    // used for writing to file?
-    public ToDoItem(JSONObject jsonObject) throws JSONException {
-        mToDoText = jsonObject.getString(TODOTEXT);
-        mToDoDescription = jsonObject.getString(TODODESCRIPTION);
-        mHasReminder = jsonObject.getBoolean(TODOREMINDER);
-        mTodoColor = jsonObject.getInt(TODOCOLOR);
-        mLink = jsonObject.getString(TODOLINK);
-        mPriority = jsonObject.getBoolean(TODOPRIORITY);
-
-        mTodoIdentifier = UUID.fromString(jsonObject.getString(TODOIDENTIFIER));
-
-//        if(jsonObject.has(TODOLASTEDITED)){
-//            mLastEdited = new Date(jsonObject.getLong(TODOLASTEDITED));
-//        }
-        if (jsonObject.has(TODODATE)) {
-            mToDoDate = new Date(jsonObject.getLong(TODODATE));
-        }
-    }*/
 
     // setter for title
     @Override
@@ -81,6 +72,7 @@ public class ToDoItem extends TaskItem {
         jsonObject.put(TODODESCRIPTION, mToDoDescription);
         jsonObject.put(TODOLINK,mLink);
         jsonObject.put(TODOPRIORITY,mPriority);
+        jsonObject.put(TODOCATEGORY,catIdent);
 //        jsonObject.put(TODOLASTEDITED, mLastEdited.getTime());
         if (mToDoDate != null) {
             jsonObject.put(TODODATE, mToDoDate.getTime());
@@ -88,6 +80,9 @@ public class ToDoItem extends TaskItem {
         jsonObject.put(TODOCOLOR, mTodoColor);
         jsonObject.put(TODOIDENTIFIER, mTodoIdentifier.toString());
         jsonObject.put(ITEMTYPE,TASKTYPE);
+
+        //Save the position into the jsonObject (task #83)
+        jsonObject.put("position", spinnerPosition);
 
         return jsonObject;
     }
@@ -101,6 +96,8 @@ public class ToDoItem extends TaskItem {
         mTodoColor = jsonObject.getInt(TODOCOLOR);
         mLink = jsonObject.getString(TODOLINK);
         mPriority = jsonObject.getBoolean(TODOPRIORITY);
+        catIdent = jsonObject.getString(TODOCATEGORY);
+
 
         mTodoIdentifier = UUID.fromString(jsonObject.getString(TODOIDENTIFIER));
 
@@ -111,12 +108,47 @@ public class ToDoItem extends TaskItem {
             mToDoDate = new Date(jsonObject.getLong(TODODATE));
         }
 
+        // Get the spinner position from inside the jsonObject (task #83)
+        spinnerPosition = jsonObject.getInt("position");
+
+    }
+
+    // Sets the task's spinner position
+    public void setSpinnerPosition(int pos) {
+        spinnerPosition = pos;
+
+    }
+
+    // Gets the task's spinner position
+    public int getSpinnerPosition() {
+        return this.spinnerPosition;
+    }
+
+    @Override
+    public String toString() {
+        return this.mToDoText;
     }
 
 
     // empty constructor which makes a default note with placeholder info
     public ToDoItem() {
         this("Clean my room","Sweep and Mop my Room","www.google.com", true, new Date(),false);
+    }
+
+    /**
+     * Gets the Category string for which this task belongs to
+     * @return Category string that the task is in, none or empty if none
+     */
+    public String getCategoryBelongs(){
+       return this.catIdent;
+    }
+
+    /**
+     * Sets the Category string for which this task belongs to
+     * @param category Category to set this task to belong to
+     */
+    public void setCategoryBelongs(String category){
+        this.catIdent = category;
     }
 
     // getter for the description

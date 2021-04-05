@@ -27,11 +27,14 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.content.ClipboardManager;
 import android.widget.Toast;
@@ -41,14 +44,22 @@ import com.example.avjindersinghsekhon.minimaltodo.AppDefault.AppDefaultFragment
 import com.example.avjindersinghsekhon.minimaltodo.Main.MainActivity;
 import com.example.avjindersinghsekhon.minimaltodo.Main.MainFragment;
 import com.example.avjindersinghsekhon.minimaltodo.R;
+import com.example.avjindersinghsekhon.minimaltodo.Utility.CategoryItem;
+import com.example.avjindersinghsekhon.minimaltodo.Utility.StoreRetrieveData;
+import com.example.avjindersinghsekhon.minimaltodo.Utility.TaskItem;
 import com.example.avjindersinghsekhon.minimaltodo.Utility.ToDoItem;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
+import org.json.JSONException;
+
+import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
@@ -106,8 +117,15 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 
     private ImageButton deleteLink; //delete link button
 
+    // New Variable for category spinner (drop down button and drawer)
+    private Spinner categorySpinner;
+
+
+
+
+
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(View view, @Nullable final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         app = (AnalyticsApplication) getActivity().getApplication();
 //        setContentView(R.layout.new_to_do_layout);
@@ -147,6 +165,77 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 
         super.onCreate(savedInstanceState);
 
+        //Category Drop Down Starts Here
+
+        // Sets the category spinner to the xml view
+        categorySpinner = (Spinner) view.findViewById(R.id.spinner1);
+
+        //Drop down of all the categories including the none category
+        List<CategoryItem> categories = new ArrayList<>();
+        categories.add(new CategoryItem("None"));
+
+
+        //this creates a list of task items (Both ToDoItems and CategoryItems)
+        ArrayList<TaskItem> items = new ArrayList<>();
+
+        // Create a store variable that is of class StoreRetrieveData
+        StoreRetrieveData store = new StoreRetrieveData(getContext(),"todoitems.json");
+
+
+        // set the items list to what is returned from the getLocallyStoredData method (all the locally stored taskItems)
+        items = getLocallyStoredData(store);
+
+        // Iterate through each of the task items
+        for (TaskItem newItem : items) {
+
+            // If the task item is also a category item
+            if (newItem instanceof CategoryItem) {
+
+                //Add the category to the spinner drop down
+                categories.add(((CategoryItem) newItem));
+            }
+        }
+
+
+        //String Array Adapter
+        ArrayAdapter<CategoryItem> categoryAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, categories);
+
+        //Set Adapter
+        categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        categorySpinner.setAdapter(categoryAdapter);
+
+        //Set the text color of the item selected to white so that it shows up better
+        AdapterView.OnItemSelectedListener listener = new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                ((TextView) parent.getChildAt(0)).setTextColor(0xFFFFFFFF);
+
+                // Gets the name of the currently selected category
+                CategoryItem cItem = (CategoryItem) parent.getItemAtPosition(position);
+
+                mUserToDoItem.setCategoryBelongs(cItem.getTitle());
+
+                //Sets the spinners position depending on what the user chose (task #83)
+                mUserToDoItem.setSpinnerPosition(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        };
+
+
+
+        categorySpinner.setOnItemSelectedListener(listener);
+
+
+        //Category Drop Down ends Here
+
+
+
+
+
         //Show an X in place of <-
         final Drawable cross = getResources().getDrawable(R.drawable.ic_clear_white_24dp);
         if (cross != null) {
@@ -174,6 +263,9 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
         mUserHasPriority = mUserToDoItem.isPriority();
         mUserReminderDate = mUserToDoItem.getToDoDate();
         mUserColor = mUserToDoItem.getTodoColor();
+
+        //Sets the task's category spinner to the position saved in that task earlier (task #83)
+        categorySpinner.setSelection(mUserToDoItem.getSpinnerPosition());
 
 
 //        if(mUserToDoItem.getLastEdited()==null) {
@@ -813,4 +905,23 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
     public static AddToDoFragment newInstance() {
         return new AddToDoFragment();
     }
+
+    //REMOVE THIS AFTER
+    public static ArrayList<TaskItem> getLocallyStoredData(StoreRetrieveData storeRetrieveData) {
+        ArrayList<TaskItem> items = null;
+
+        try {
+            items = storeRetrieveData.loadFromFile();
+
+        } catch (IOException | JSONException e) {
+            e.printStackTrace();
+        }
+
+        if (items == null) {
+            items = new ArrayList<>();
+        }
+        return items;
+
+    }
+
 }

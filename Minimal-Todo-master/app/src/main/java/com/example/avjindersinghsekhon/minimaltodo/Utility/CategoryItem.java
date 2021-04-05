@@ -1,5 +1,6 @@
 package com.example.avjindersinghsekhon.minimaltodo.Utility;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -8,58 +9,63 @@ import java.util.UUID;
 
 public class CategoryItem extends TaskItem {
 
+    // declare variables
     private String title;
     private UUID categoryIdentifier;
-    private ArrayList<ToDoItem> tasks;
 
+    // final strings used for writing to the JSON
     private static final String CATTITLE = "cattitle";
     private static final String CATIDENTIFIER = "catidentifier";
 
+    // also used for the JSON
     private static final String ITEMTYPE = "itemtype";
     private final String TASKTYPE = "category";
 
+    /**
+     * Creates a Category object with an empty title
+     */
     public CategoryItem(){
         title = "";
-        tasks = new ArrayList<>();
         categoryIdentifier = UUID.randomUUID();
     }
 
+    /**
+     * Creates a Category object with the specified title
+     * @param title - title of the Category
+     */
     public CategoryItem(String title){
         this.title = title;
-        tasks = new ArrayList<>();
         categoryIdentifier = UUID.randomUUID();
     }
 
-    public CategoryItem(JSONObject jsonObject) throws JSONException {
-        title = jsonObject.getString(CATTITLE);
-
+    @Override
+    public String toString() {
+        return this.title;
     }
 
+
+    /**
+     * Returns the title of the Category
+     * @return - title
+     */
     public String getTitle(){
         return this.title;
     }
 
-    public ArrayList<ToDoItem> getTasks(){
-        return this.tasks;
-    }
-
-    public void addTask(ToDoItem item){
-
-        tasks.add(item);
-    }
-
-    // .remove(item) returns a boolean
-    // "Removes the first occurrence of the specified element from this list, if it is present."
-    public boolean removeTask(ToDoItem item){
-        return tasks.remove(item);
-    }
-
+    /**
+     * Used for setting the title of the Category
+     * @param title - title of Category
+     */
     @Override
     public void setTitle(String title) {
         this.title = title;
     }
 
-
+    /**
+     * Converts the Category object to JSONObject, used for writing to the file
+     * @return JSONObject
+     * @throws JSONException
+     */
     @Override
     public JSONObject toJSON() throws JSONException {
 
@@ -71,6 +77,11 @@ public class CategoryItem extends TaskItem {
         return jsonObject;
     }
 
+    /**
+     * Takes the fields in the JSONObject and converts them to a Category object
+     * @param jsonObject the object to convert to get the information from
+     * @throws JSONException
+     */
     @Override
     public void jsonToItem(JSONObject jsonObject) throws JSONException {
 
@@ -79,6 +90,10 @@ public class CategoryItem extends TaskItem {
 
     }
 
+    /**
+     * UUID Identifier
+     * @return the unique UUID Identifier
+     */
     @Override
     public UUID getIdentifier() {
         return categoryIdentifier;
