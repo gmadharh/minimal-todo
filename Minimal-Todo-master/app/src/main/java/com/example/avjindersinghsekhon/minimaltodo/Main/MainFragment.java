@@ -560,11 +560,17 @@ private FloatingActionButton mCategoryFAB;
 
         }
 
+        // Else the user clicked a category
+        // Get the updated arraylist back from the Category to see if there were any changes to the tasks
         else if(requestCode == REQUEST_ID_VIEW_CAT){
 
+            // set the main arraylist to the updated one
             mToDoItemsArrayList = (ArrayList<TaskItem>) data.getSerializableExtra("newArray");
+
+            // update the one in the recycler view as well
             items = mToDoItemsArrayList;
-            //adapter = new MainFragment.BasicListAdapter(mToDoItemsArrayList);
+
+            // notify there was a change so we can refresh
             adapter.notifyDataSetChanged();
 
 
@@ -706,6 +712,9 @@ private FloatingActionButton mCategoryFAB;
             }
             holder.linearLayout.setBackgroundColor(bgColor);
 
+            /**
+             * If the todoitem belongs to the category "None" (which is just no category, the main page), then display it
+             */
             if(item instanceof ToDoItem && ((ToDoItem) item).getCategoryBelongs().equalsIgnoreCase("None"))
             {
                 System.out.println("onBindViewHolder: " + ((ToDoItem) item).getToDoText());
@@ -778,6 +787,10 @@ private FloatingActionButton mCategoryFAB;
                 });
                 
             }
+
+            /**
+             * Else don't display the task, if it doesn't belong to the main page
+             */
             else{
                 holder.linearLayout.setVisibility(View.GONE);
                 holder.itemView.setLayoutParams(new LinearLayout.LayoutParams(0,0));

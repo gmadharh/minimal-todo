@@ -89,7 +89,11 @@ public class CategoryViewFragment extends AppDefaultFragment {
 
 
         super.onViewCreated(view, savedInstanceState);
+
+        // get the task arraylist from mainfragment
         tasks = (ArrayList<TaskItem>) getActivity().getIntent().getSerializableExtra("tasks");
+
+        // get the category that the user clicked
         currentCategory = (CategoryItem) getActivity().getIntent().getSerializableExtra("categoryClicked");
         String theme = getActivity().getSharedPreferences(MainFragment.THEME_PREFERENCES, MODE_PRIVATE).getString(MainFragment.THEME_SAVED, MainFragment.LIGHTTHEME);
         mRecyclerView = (RecyclerViewEmptySupport) view.findViewById(R.id.toDoRecyclerView);
@@ -106,6 +110,8 @@ public class CategoryViewFragment extends AppDefaultFragment {
         } else if (theme.equals(MainFragment.LIGHTPINKTHEME)) {
             mRecyclerView.setBackgroundColor(getResources().getColor(R.color.primary_lightest));
         }
+
+        // setup the recycler view
         mRecyclerView.setEmptyView(view.findViewById(R.id.toDoEmptyView));
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -118,13 +124,14 @@ public class CategoryViewFragment extends AppDefaultFragment {
 
         toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
 
+        // setup a listener for the back arrow to go back to the main page
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //let main fragment know we need to recreate the page
                 MainFragment.navBack = true;
-                System.out.println("clicked the arrow");
 
+                // create a new intent and put the updated arraylist of tasks in it
                 Intent i = new Intent();
                 i.putExtra("newArray",tasks);
 
@@ -134,27 +141,22 @@ public class CategoryViewFragment extends AppDefaultFragment {
                     e.printStackTrace();
                 }
 
+                // set the result to ok and finish the activity
                 getActivity().setResult(RESULT_OK,i);
                 getActivity().finish();
 
             }
         });
 
+        // setup a listener for the recycler scroll view
         customRecyclerScrollViewListener = new CustomRecyclerScrollViewListener() {
             @Override
-            public void show() {
-
-               // mAddToDoItemFAB.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
-//                mAddToDoItemFAB.animate().translationY(0).setInterpolator(new AccelerateInterpolator(2.0f)).start();
-            }
+            public void show() { }
 
             @Override
-            public void hide() {
-                //CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams) mAddToDoItemFAB.getLayoutParams();
-                //int fabMargin = lp.bottomMargin;
-                //mAddToDoItemFAB.animate().translationY(mAddToDoItemFAB.getHeight() + fabMargin).setInterpolator(new AccelerateInterpolator(2.0f)).start();
-            }
+            public void hide() { }
         };
+
 
         mRecyclerView.addOnScrollListener(customRecyclerScrollViewListener);
 
@@ -180,6 +182,11 @@ public class CategoryViewFragment extends AppDefaultFragment {
     public class BasicListAdapter extends RecyclerView.Adapter<CategoryViewFragment.BasicListAdapter.ViewHolder> implements ItemTouchHelperClass.ItemTouchHelperAdapter {
         private ArrayList<TaskItem> items;
 
+        /**
+         * Responsible for moving the position of items
+         * @param fromPosition
+         * @param toPosition
+         */
         @Override
         public void onItemMoved(int fromPosition, int toPosition) {
             if (fromPosition < toPosition) {
@@ -194,6 +201,10 @@ public class CategoryViewFragment extends AppDefaultFragment {
             notifyItemMoved(fromPosition, toPosition);
         }
 
+        /**
+         * Responsible for deleting items
+         * @param position
+         */
         @Override
         public void onItemRemoved(final int position) {
             app = (AnalyticsApplication) getActivity().getApplication();
@@ -271,10 +282,11 @@ public class CategoryViewFragment extends AppDefaultFragment {
             }
             holder.linearLayout.setBackgroundColor(bgColor);
 
+            /**
+             * If the task is a todoitem and belongs to the category, then display it
+             */
             if(item instanceof ToDoItem && ((ToDoItem) item).getCategoryBelongs().equalsIgnoreCase(currentCategory.getTitle()))
             {
-
-                System.out.println("Title: " + ((ToDoItem) item).getToDoText() + "\nDesc: " + ((ToDoItem) item).getmToDoDescription() + "\nCategory: " + ((ToDoItem) item).getCategoryBelongs());
 
                 holder.linearLayout.setVisibility(View.VISIBLE);
 
@@ -328,6 +340,9 @@ public class CategoryViewFragment extends AppDefaultFragment {
 
             }
 
+            /**
+             * Else the task doesn't belong to the current category, dont display it
+             */
             else{
                 holder.linearLayout.setVisibility(View.GONE);
                 holder.itemView.setLayoutParams(new LinearLayout.LayoutParams(0,0));
