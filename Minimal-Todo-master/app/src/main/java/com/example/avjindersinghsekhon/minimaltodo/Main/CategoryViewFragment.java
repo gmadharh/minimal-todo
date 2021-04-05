@@ -56,6 +56,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import com.example.avjindersinghsekhon.minimaltodo.Main.MainFragment;
+
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 import static android.content.Context.ALARM_SERVICE;
@@ -76,6 +78,11 @@ public class CategoryViewFragment extends AppDefaultFragment {
     private static final int REQUEST_ID_TODO_ITEM = 100;
 
     public static final String FILENAME = "todoitems.json";
+    private AnalyticsApplication app;
+
+    private TaskItem mJustDeletedToDoItem;
+    private int mIndexOfDeletedToDoItem;
+    private CoordinatorLayout mCoordLayout;
 
     /*Used for deletion*/
     private AnalyticsApplication app;
@@ -86,7 +93,7 @@ public class CategoryViewFragment extends AppDefaultFragment {
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-
+        mCoordLayout = (CoordinatorLayout) view.findViewById(R.id.myCoordinatorLayoutCategory);
 
         super.onViewCreated(view, savedInstanceState);
 
@@ -206,8 +213,14 @@ public class CategoryViewFragment extends AppDefaultFragment {
          * @param position
          */
         @Override
+        //START
         public void onItemRemoved(final int position) {
+
+            final MainFragment mainFragment = new MainFragment();
+
+            //Remove this line if not using Google Analytics
             app = (AnalyticsApplication) getActivity().getApplication();
+
             app.send(this, "Action", "Swiped Todo Away");
 
             //remove the task and store it so that if the user wants to undo it can be retrieved
@@ -232,11 +245,26 @@ public class CategoryViewFragment extends AppDefaultFragment {
                                 Intent i = new Intent(getContext(), TodoNotificationService.class);
                                 i.putExtra(TodoNotificationService.TODOTEXT, ((ToDoItem) mJustDeletedToDoItem).getToDoText());
                                 i.putExtra(TodoNotificationService.TODOUUID, mJustDeletedToDoItem.getIdentifier());
-                                createAlarm(i, mJustDeletedToDoItem.getIdentifier().hashCode(), ((ToDoItem) mJustDeletedToDoItem).getToDoDate().getTime());
+                                //mainFragment.createAlarm(i, mJustDeletedToDoItem.getIdentifier().hashCode(), ((ToDoItem) mJustDeletedToDoItem).getToDoDate().getTime());
                             }
                             notifyItemInserted(mIndexOfDeletedToDoItem);
                         }
+
                     }).show();
+            //SAVES NEW ARRAYLIST TO FILE
+            saveData();
+
+
+        }
+        //END
+
+        private void saveData() {
+            try {
+                storeRetrieveData.saveToFile(tasks);
+            } catch (JSONException | IOException e) {
+                e.printStackTrace();
+            }
+
         }
 
         @Override

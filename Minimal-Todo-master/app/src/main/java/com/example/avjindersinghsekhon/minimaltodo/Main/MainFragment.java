@@ -56,6 +56,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Iterator;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.content.Context.ALARM_SERVICE;
@@ -586,14 +587,14 @@ private FloatingActionButton mCategoryFAB;
         return pi != null;
     }
 
-    private void createAlarm(Intent i, int requestCode, long timeInMillis) {
+    public void createAlarm(Intent i, int requestCode, long timeInMillis) {
         AlarmManager am = getAlarmManager();
         PendingIntent pi = PendingIntent.getService(getContext(), requestCode, i, PendingIntent.FLAG_UPDATE_CURRENT);
         am.set(AlarmManager.RTC_WAKEUP, timeInMillis, pi);
 //        Log.d("OskarSchindler", "createAlarm "+requestCode+" time: "+timeInMillis+" PI "+pi.toString());
     }
 
-    private void deleteAlarm(Intent i, int requestCode) {
+    public void deleteAlarm(Intent i, int requestCode) {
         if (doesPendingIntentExist(i, requestCode)) {
             PendingIntent pi = PendingIntent.getService(getContext(), requestCode, i, PendingIntent.FLAG_NO_CREATE);
             pi.cancel();
@@ -656,16 +657,63 @@ private FloatingActionButton mCategoryFAB;
 
                             //Comment the line below if not using Google Analytics
                             app.send(this, "Action", "UNDO Pressed");
-                            items.add(mIndexOfDeletedToDoItem, mJustDeletedToDoItem);
+
                             if (((ToDoItem) mJustDeletedToDoItem).getToDoDate() != null && ((ToDoItem) mJustDeletedToDoItem).hasReminder()) {
                                 Intent i = new Intent(getContext(), TodoNotificationService.class);
                                 i.putExtra(TodoNotificationService.TODOTEXT, ((ToDoItem) mJustDeletedToDoItem).getToDoText());
                                 i.putExtra(TodoNotificationService.TODOUUID, mJustDeletedToDoItem.getIdentifier());
                                 createAlarm(i, mJustDeletedToDoItem.getIdentifier().hashCode(), ((ToDoItem) mJustDeletedToDoItem).getToDoDate().getTime());
                             }
+                            //Refreshes the list
+                            items.add(mIndexOfDeletedToDoItem, mJustDeletedToDoItem);
                             notifyItemInserted(mIndexOfDeletedToDoItem);
                         }
                     }).show();
+
+            //User Story #20, Task #75 - Ask user for confirmation to delete the whole category and its tasks
+            //Check if its a category
+            if (mJustDeletedToDoItem instanceof CategoryItem) {
+
+                //If it is a category then create a pop up
+                final String catName = ((CategoryItem) mJustDeletedToDoItem).getTitle();
+                System.out.println(catName);
+
+                for (TaskItem it : items) {
+                    if(it instanceof ToDoItem){
+                       if (((ToDoItem) it).getCategoryBelongs().equals(catName)) {
+
+                        //workaround instead of deleting from the items list
+                        ((ToDoItem) it).setCategoryBelongs("Null");
+                    }
+                    }
+
+
+                }
+
+
+                Snackbar.make(mCoordLayout, "Are you sure you want to delete \"" + catName + "\" and all of its tasks? ", Snackbar.LENGTH_LONG)
+                        .setAction("UNDO", new View.OnClickListener() {
+                            @Override
+                            // make undo work
+                            public void onClick(View v) {
+                                items.add(mIndexOfDeletedToDoItem, mJustDeletedToDoItem);
+                                notifyItemInserted(mIndexOfDeletedToDoItem);
+                                for (TaskItem it : items) {
+                                    if(it instanceof ToDoItem){
+                                        if (((ToDoItem) it).getCategoryBelongs().equals("Null")) {
+                                            ((ToDoItem) it).setCategoryBelongs(catName);
+                                        }
+                                    }
+
+
+                                }
+                            }
+
+
+                        }).show();
+            }
+
+
         }
 
         @Override
