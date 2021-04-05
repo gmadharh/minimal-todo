@@ -133,10 +133,10 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
         ImageButton reminderIconImageButton;
         TextView reminderRemindMeTextView;
 
+        //get the theme
         theme = getActivity().getSharedPreferences(MainFragment.THEME_PREFERENCES, MODE_PRIVATE).getString(MainFragment.THEME_SAVED, MainFragment.LIGHTTHEME);
 
-
-
+        //set the theme
         if(theme.equals(MainFragment.LIGHTTHEME)) {
             getActivity().setTheme(R.style.CustomStyle_LightTheme);
         } else if (theme.equals(MainFragment.DARKTHEME)) {
