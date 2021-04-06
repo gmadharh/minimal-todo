@@ -62,6 +62,18 @@ public class CategoryItem extends TaskItem {
     }
 
     /**
+     * Used for deleting task
+     */
+    public boolean delete() {
+        setTitle(null);
+        if(this.getTitle() == null) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
      * Converts the Category object to JSONObject, used for writing to the file
      * @return JSONObject
      * @throws JSONException

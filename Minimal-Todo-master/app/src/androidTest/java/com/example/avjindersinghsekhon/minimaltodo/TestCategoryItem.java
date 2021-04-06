@@ -192,4 +192,15 @@ public class TestCategoryItem extends TestCase {
 
     }
 
+    /**
+     * Ensure that task can be deleted from category
+     */
+    public void testDeletingTaskFromCategory() {
+        CategoryItem categoryItem = new CategoryItem(CAT_TITLE);
+
+        boolean retVal = categoryItem.delete();
+
+        assertEquals(retVal,true);
+    }
+
 }
