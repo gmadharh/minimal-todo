@@ -80,12 +80,7 @@ public class CategoryViewFragment extends AppDefaultFragment {
     public static final String FILENAME = "todoitems.json";
     private AnalyticsApplication app;
 
-    private TaskItem mJustDeletedToDoItem;
-    private int mIndexOfDeletedToDoItem;
-    private CoordinatorLayout mCoordLayout;
-
     /*Used for deletion*/
-    private AnalyticsApplication app;
     private TaskItem mJustDeletedToDoItem;
     private int mIndexOfDeletedToDoItem;
     private CoordinatorLayout mCoordLayout;
