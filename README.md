@@ -12,7 +12,7 @@ Refer to the [wiki](https://github.com/gmadharh/minimal-todo/wiki) for more deta
 - Added a link section in task
 - Mark a task as priority
 - Undo button when deleting tasks
-- And more
+- And more...
 
 ---
 
