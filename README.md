@@ -15,17 +15,29 @@ Refer to the [wiki](https://github.com/gmadharh/minimal-todo/wiki) for more deta
 
 ---
 
-<table>
-  <tr>
-    <td align="center"><img src="https://github.com/gmadharh/minimal-todo/assets/58638508/077fdaaa-5025-4a12-be9f-338e5287d4c7" width="300px" /></td>
-    <td align="center"><img src="https://raw.githubusercontent.com/wiki/gmadharh/minimal-todo/Sprint4_UserStory3.gif" width="300px" /></td>
-    <td align="center"><img src="https://raw.githubusercontent.com/wiki/gmadharh/minimal-todo/Sprint4UserStory62Task83.gif" width="300px"/></td>
-  </tr>
-  <tr>
-    <td align="center"><i>Change: FAB for adding folders</i></td>
-    <td align="center"><i>Change: Undo button to bring back deleted task</i></td>
-    <td align="center"><i>Change: Add task to folder</i> </td>
-  </tr>
-</table>
+<p align="center">
+  <img src="https://github.com/gmadharh/minimal-todo/assets/58638508/077fdaaa-5025-4a12-be9f-338e5287d4c7" width="300px" /><br>
+  <i>Change: FAB for adding folders</i>
+</p>
+
+---
+<p align="center">
+  <img src="https://raw.githubusercontent.com/wiki/gmadharh/minimal-todo/Sprint4_UserStory3.gif" width="300px" /><br>
+  <i>Change: Undo button to bring back deleted task</i>
+</p>
+
+---
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/wiki/gmadharh/minimal-todo/Sprint4UserStory62Task83.gif" width="300px"/><br>
+  <i>Change: Add task to folder</i> 
+</p>
+
+
+
+
+
+
+
 
 
