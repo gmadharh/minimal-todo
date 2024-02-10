@@ -1,3 +1,5 @@
+![image](https://github.com/gmadharh/minimal-todo/assets/58638508/bce1f78b-e027-481e-b9d9-f4710823da26)
+
 # Minimal ToDo App
 
 Android app adapted from an [open source app](https://github.com/avjinder/Minimal-Todo) in Java following the Scrum ideology. 
