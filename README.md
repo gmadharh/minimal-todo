@@ -1,4 +1,4 @@
-![image](https://github.com/gmadharh/minimal-todo/assets/58638508/bce1f78b-e027-481e-b9d9-f4710823da26)
+<img src="https://github.com/gmadharh/minimal-todo/assets/58638508/bce1f78b-e027-481e-b9d9-f4710823da26" width="300px" />
 
 # Minimal ToDo App
 
